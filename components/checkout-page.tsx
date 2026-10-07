@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Banknote, CreditCard, Loader2, Lock, ShoppingCart, Smartphone, ArrowRight } from "lucide-react";
+import { Banknote, CreditCard, Loader2, Lock, MapPin, Receipt, ShieldCheck, ShoppingCart, Smartphone, ArrowRight } from "lucide-react";
 import { useStore } from "./store-provider";
 import { Steps, getSavedCoupon, useQuote } from "./checkout-shared";
 import { inr, INDIAN_STATES } from "@/lib/format";
@@ -152,7 +152,7 @@ export function CheckoutPage({ methods, loggedIn, user, savedAddr }: { methods: 
 
   const summary = (
     <div className="card p-5 md:p-6">
-      <h2 className="font-serif text-3xl font-semibold">Order Summary</h2>
+      <h2 className="flex items-center gap-3 font-serif text-3xl font-semibold"><span className="icon-chip"><Receipt className="h-4 w-4" /></span>Order Summary</h2>
       <ul className="mt-4 space-y-3">
         {items.map((it) => (
           <li key={it.key} className="flex items-center gap-3">
@@ -178,7 +178,8 @@ export function CheckoutPage({ methods, loggedIn, user, savedAddr }: { methods: 
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
         {method === "COD" ? "Place Order" : "Pay"} · {inr(total)}
       </button>
-      <p className="mt-2 text-center text-[11px] text-muted">By placing your order you agree to our <Link href="/pages/terms-of-service" className="underline">Terms</Link> &amp; <Link href="/pages/refund-and-cancellation" className="underline">Refund Policy</Link>.</p>
+      <p className="mt-3 flex items-center justify-center gap-1.5 text-[11px] font-semibold text-stock"><ShieldCheck className="h-3.5 w-3.5" /> 100% secure checkout · SSL encrypted</p>
+      <p className="mt-1 text-center text-[11px] text-muted">By placing your order you agree to our <Link href="/pages/terms-of-service" className="underline">Terms</Link> &amp; <Link href="/pages/refund-and-cancellation" className="underline">Refund Policy</Link>.</p>
     </div>
   );
 
@@ -188,7 +189,7 @@ export function CheckoutPage({ methods, loggedIn, user, savedAddr }: { methods: 
       <div className="mt-8 grid items-start gap-6 lg:grid-cols-[1.4fr_1fr]">
         <div className="space-y-5">
           <div className="card p-5 md:p-6">
-            <h1 className="font-serif text-3xl font-semibold">Delivery Address</h1>
+            <h1 className="flex items-center gap-3 font-serif text-3xl font-semibold"><span className="icon-chip"><MapPin className="h-4 w-4" /></span>Delivery Address</h1>
             {!loggedIn && (
               <div className="mt-4 rounded-xl border border-[#EADFCB] bg-tint p-3.5 text-[13px]">
                 <p className="font-semibold text-teak-dark">Guest Checkout</p>
@@ -219,7 +220,7 @@ export function CheckoutPage({ methods, loggedIn, user, savedAddr }: { methods: 
             </div>
           </div>
           <div className="card p-5 md:p-6">
-            <h2 className="font-serif text-3xl font-semibold">Payment Method</h2>
+            <h2 className="flex items-center gap-3 font-serif text-3xl font-semibold"><span className="icon-chip"><CreditCard className="h-4 w-4" /></span>Payment Method</h2>
             <div className="mt-4 space-y-3">
               {opts.map((o) => (
                 <label key={o.v} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition ${method === o.v ? "border-teak bg-[#FFFBF3]" : "border-line"} ${o.disabled ? "cursor-not-allowed opacity-50" : ""}`}>

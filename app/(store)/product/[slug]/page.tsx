@@ -7,6 +7,20 @@ import { Breadcrumbs, Paragraphs, SectionHead } from "@/components/ui";
 import { ProductCard, Stars } from "@/components/product-card";
 import { BuyBox, Gallery, ReviewForm, Tabs } from "@/components/product-detail";
 import { fmtDate } from "@/lib/format";
+import { Box, Layers, Paintbrush, Ruler, ShieldCheck, Trees, Wrench, BedDouble, Package } from "lucide-react";
+
+const specIcon = (label: string) => {
+  const l = label.toLowerCase();
+  if (l.includes("material") || l.includes("wood")) return Trees;
+  if (l.includes("finish") || l.includes("colour") || l.includes("color")) return Paintbrush;
+  if (l.includes("dimension")) return Ruler;
+  if (l.includes("size")) return BedDouble;
+  if (l.includes("storage")) return Box;
+  if (l.includes("assembl")) return Wrench;
+  if (l.includes("warrant")) return ShieldCheck;
+  if (l.includes("weight")) return Package;
+  return Layers;
+};
 
 async function getProduct(slug: string) {
   return db.query.products.findFirst({ where: and(eq(s.products.slug, slug), eq(s.products.active, true)), with: { category: true } });
@@ -39,7 +53,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <tbody>
         {p.specs.map((x) => (
           <tr key={x.label} className="border-b border-line last:border-0">
-            <td className="w-[40%] bg-cream px-4 py-3 text-muted">{x.label}</td>
+            <td className="w-[40%] bg-cream px-4 py-3 text-muted"><span className="flex items-center gap-2">{(() => { const I = specIcon(x.label); return <I className="h-3.5 w-3.5 text-teak" />; })()}{x.label}</span></td>
             <td className="px-4 py-3">{x.value}</td>
           </tr>
         ))}

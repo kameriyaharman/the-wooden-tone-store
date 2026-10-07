@@ -6,6 +6,7 @@ import { CartDrawer, MobileBottomNav, Toast, WhatsAppFab } from "@/components/ca
 import { getPublicSettings } from "@/lib/settings";
 import { navData } from "@/lib/catalog";
 import { getSession } from "@/lib/auth";
+import { CustomCursor, ScrollReveal } from "@/components/motion";
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
   const [st, rooms, session] = await Promise.all([getPublicSettings(), navData(), getSession()]);
@@ -26,6 +27,8 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       <WhatsAppFab number={st.whatsapp} />
       <MobileBottomNav />
       <Toast />
+      <ScrollReveal />
+      <CustomCursor />
     </StoreProvider>
   );
 }

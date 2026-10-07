@@ -15,8 +15,8 @@ export default {
         muted: "#6E655B",
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', "Georgia", "serif"],
-        sans: ["Manrope", "system-ui", "sans-serif"],
+        serif: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', '"Noto Sans"', '"Liberation Sans"', 'Arial', 'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"', '"Noto Color Emoji"'],
+        sans: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', '"Noto Sans"', '"Liberation Sans"', 'Arial', 'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"', '"Noto Color Emoji"'],
       },
       maxWidth: { site: "1200px" },
       boxShadow: { card: "0 1px 2px rgba(58,36,17,.04), 0 8px 24px -12px rgba(58,36,17,.12)", btn: "0 6px 16px -6px rgba(196,132,29,.55)" },

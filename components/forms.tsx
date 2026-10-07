@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { ArrowRight, CheckCircle2, Loader2, Upload, X } from "lucide-react";
+import { ArrowRight, BedDouble, CheckCircle2, DoorClosed, Flame, Loader2, Plus, Sofa, Table, Tv, Upload, UtensilsCrossed, X, Trees } from "lucide-react";
+const TYPE_ICONS: Record<string, typeof Sofa> = { Bed: BedDouble, Sofa, "Dining Set": UtensilsCrossed, Wardrobe: DoorClosed, "TV Unit": Tv, Mandir: Flame, Table, Other: Plus };
 
 export function ContactForm() {
   const [state, setState] = useState<"idle" | "sending" | "done">("idle");
@@ -78,11 +79,11 @@ export function CustomOrderForm() {
       <input name="company" className="hidden" tabIndex={-1} autoComplete="off" />
       <div>
         <p className="label req">What do you want to make?</p>
-        <div className="flex flex-wrap gap-2 rounded-xl border border-line p-2">{TYPES.map((t) => <button type="button" key={t} onClick={() => setType(t)} className={pill(type === t)}>{t}</button>)}</div>
+        <div className="flex flex-wrap gap-2 rounded-xl border border-line p-2">{TYPES.map((t) => { const I = TYPE_ICONS[t]; return <button type="button" key={t} onClick={() => setType(t)} className={`${pill(type === t)} inline-flex items-center gap-1.5`}>{I && <I className="h-3.5 w-3.5" />}{t}</button>; })}</div>
       </div>
       <div>
         <p className="label">Preferred wood</p>
-        <div className="flex flex-wrap gap-2 rounded-xl border border-line p-2">{WOODS.map((t) => <button type="button" key={t} onClick={() => setWood(t)} className={pill(wood === t)}>{t}</button>)}</div>
+        <div className="flex flex-wrap gap-2 rounded-xl border border-line p-2">{WOODS.map((t) => <button type="button" key={t} onClick={() => setWood(t)} className={`${pill(wood === t)} inline-flex items-center gap-1.5`}><Trees className="h-3.5 w-3.5" />{t}</button>)}</div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div><label className="label req">Width (in)</label><input name="width" required inputMode="decimal" className="input" placeholder="e.g. 72" /></div>

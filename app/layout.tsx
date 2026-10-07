@@ -1,13 +1,3 @@
-import "@fontsource/cormorant-garamond/latin-500.css";
-import "@fontsource/cormorant-garamond/latin-600.css";
-import "@fontsource/cormorant-garamond/latin-700.css";
-import "@fontsource/cormorant-garamond/latin-500-italic.css";
-import "@fontsource/cormorant-garamond/latin-600-italic.css";
-import "@fontsource/manrope/latin-400.css";
-import "@fontsource/manrope/latin-500.css";
-import "@fontsource/manrope/latin-600.css";
-import "@fontsource/manrope/latin-700.css";
-import "@fontsource/manrope/latin-800.css";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { getSettings } from "@/lib/settings";

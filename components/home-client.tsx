@@ -19,7 +19,7 @@ export function HeroSlider({ slides, marquee, spotlight }: { slides: Slide[]; ma
       <div className="relative h-[540px] overflow-hidden md:h-[600px]">
         {slides.map((s, k) => (
           <div key={s.id} className={`absolute inset-0 transition-opacity duration-700 ${k === i ? "opacity-100" : "pointer-events-none opacity-0"}`} aria-hidden={k !== i}>
-            <img src={s.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+            <img src={s.image} alt="" className={`absolute inset-0 h-full w-full object-cover ${k === i ? "kenburns" : ""}`} />
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/10" />
             <div className="container-site relative flex h-full flex-col justify-center pb-16">
               {s.eyebrow && <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#E9B85E]">{s.eyebrow}</p>}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Leaf } from "lucide-react";
+import { ArrowRight, ChevronRight, Home, Leaf } from "lucide-react";
 
 export function SectionHead({ eyebrow, title, href, linkLabel = "View All", center = false, sub }: { eyebrow?: string; title: string; href?: string; linkLabel?: string; center?: boolean; sub?: string }) {
   if (center)
@@ -28,7 +28,7 @@ export function Breadcrumbs({ items }: { items: { href?: string; label: string }
       {items.map((it, i) => (
         <span key={i} className="flex items-center gap-1.5">
           {i > 0 && <ChevronRight className="h-3.5 w-3.5" />}
-          {it.href ? <Link href={it.href} className="hover:text-ink">{it.label}</Link> : <span className="font-medium text-ink">{it.label}</span>}
+          {it.href ? <Link href={it.href} className="flex items-center gap-1 hover:text-ink">{i === 0 && <Home className="h-3.5 w-3.5" />}{it.label}</Link> : <span className="font-medium text-ink">{it.label}</span>}
         </span>
       ))}
     </nav>

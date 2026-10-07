@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { BadgeCheck, Headphones, Heart, Lock, RefreshCw, Share2, ShoppingCart, Truck, X, Zap, ZoomIn } from "lucide-react";
+import { BadgeCheck, FileText, Headphones, Heart, Lock, MessageSquareQuote, RefreshCw, Ruler, Share2, ShoppingCart, Sparkles, Truck, X, Zap, ZoomIn } from "lucide-react";
 import { useStore } from "./store-provider";
 import { QtyStepper } from "./cart-ui";
 import { Stars } from "./product-card";
@@ -37,7 +37,7 @@ export function Gallery({ images, name }: { images: string[]; name: string }) {
           setTx(null);
         }}
       >
-        <img src={imgs[i]} alt={name} className="aspect-square w-full object-cover md:aspect-[4/4.2]" />
+        <img key={i} src={imgs[i]} alt={name} data-cursor="view" onClick={() => setZoom(true)} className="aspect-square w-full animate-[page-in_.4s_ease] object-cover md:aspect-[4/4.2]" />
         <button onClick={() => setZoom(true)} className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white shadow" aria-label="Zoom image"><ZoomIn className="h-4 w-4" /></button>
         {imgs.length > 1 && <span className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs text-white">{i + 1} / {imgs.length}</span>}
       </div>
@@ -107,7 +107,7 @@ export function BuyBox({ p, specLine }: { p: P; specLine: string }) {
       </div>
       {p.finishes.length > 0 && (
         <div className="mt-5">
-          <p className="text-sm"><b>Finish:</b> <span className="text-muted">{finish?.name}</span></p>
+          <p className="flex items-center gap-1.5 text-sm"><Sparkles className="h-3.5 w-3.5 text-teak" /><b>Finish:</b> <span className="text-muted">{finish?.name}</span></p>
           <div className="mt-2 flex flex-wrap gap-2.5">
             {p.finishes.map((f) => (
               <button key={f.name} onClick={() => setFinish(f)} title={f.name} aria-label={f.name}
@@ -120,7 +120,7 @@ export function BuyBox({ p, specLine }: { p: P; specLine: string }) {
       )}
       {p.sizes.length > 0 && (
         <div className="mt-5">
-          <p className="text-sm"><b>Size:</b> <span className="text-muted">{size?.label}</span></p>
+          <p className="flex items-center gap-1.5 text-sm"><Ruler className="h-3.5 w-3.5 text-teak" /><b>Size:</b> <span className="text-muted">{size?.label}</span></p>
           <div className="mt-2 flex flex-wrap gap-2">
             {p.sizes.map((s) => (
               <button key={s.name} onClick={() => setSize(s)} className={`rounded-full border px-5 py-2 text-sm ${size?.name === s.name ? "border-teak bg-tint font-semibold text-teak-dark" : "border-line hover:border-teak"}`}>{s.name}</button>
@@ -165,16 +165,17 @@ export function BuyBox({ p, specLine }: { p: P; specLine: string }) {
   );
 }
 
+const TAB_ICONS: Record<string, typeof Truck> = { desc: FileText, spec: Ruler, ship: Truck, care: Sparkles, reviews: MessageSquareQuote };
 export function Tabs({ tabs }: { tabs: { key: string; label: string; content: React.ReactNode }[] }) {
   const [t, setT] = useState(tabs[0]?.key);
   return (
     <div className="card p-5 md:p-8">
       <div className="no-scrollbar -mx-1 flex gap-6 overflow-x-auto border-b border-line px-1">
         {tabs.map((x) => (
-          <button key={x.key} onClick={() => setT(x.key)} className={`-mb-px shrink-0 border-b-2 pb-3 text-sm font-semibold ${t === x.key ? "border-teak text-teak-dark" : "border-transparent text-muted hover:text-ink"}`}>{x.label}</button>
+          <button key={x.key} onClick={() => setT(x.key)} className={`-mb-px flex shrink-0 items-center gap-1.5 border-b-2 pb-3 text-sm font-semibold transition-colors ${t === x.key ? "border-teak text-teak-dark" : "border-transparent text-muted hover:text-ink"}`}>{(() => { const I = TAB_ICONS[x.key]; return I ? <I className="h-4 w-4" /> : null; })()}{x.label}</button>
         ))}
       </div>
-      <div className="pt-6">{tabs.find((x) => x.key === t)?.content}</div>
+      <div key={t} className="animate-[page-in_.35s_ease] pt-6">{tabs.find((x) => x.key === t)?.content}</div>
     </div>
   );
 }

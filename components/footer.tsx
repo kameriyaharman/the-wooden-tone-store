@@ -12,7 +12,7 @@ export function Footer({ st }: { st: PublicSettings }) {
     { href: st.social?.linkedin, Icon: LinkedinIcon, label: "LinkedIn" },
   ].filter((x) => x.href);
   const col = "font-serif text-xl font-semibold text-white";
-  const lnk = "block py-1.5 text-[13px] text-white/70 hover:text-white";
+  const lnk = "block py-1.5 text-[13px] text-white/70 transition-all duration-300 hover:translate-x-1 hover:text-teak-light";
   return (
     <footer className="pb-16 lg:pb-0">
       <Newsletter />

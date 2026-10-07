@@ -79,7 +79,7 @@ export default async function Home() {
           </div>
           <div className="relative mx-auto w-full max-w-md md:max-w-none">
             <img src={st.aboutImage} alt="" className="ml-auto aspect-[4/5] w-[78%] rounded-3xl object-cover" />
-            <div className="absolute left-0 top-8 rounded-2xl bg-walnut px-5 py-4 text-white shadow-xl">
+            <div className="float-slow absolute left-0 top-8 rounded-2xl bg-walnut px-5 py-4 text-white shadow-xl">
               <p className="font-serif text-4xl font-semibold text-teak">{catCount}+</p>
               <p className="text-xs text-white/80">categories of handcrafted<br />furniture &amp; décor</p>
             </div>
@@ -97,7 +97,7 @@ export default async function Home() {
           </div>
           <Scroller className="mt-2">
             {trending.map((p) => (
-              <Link key={p.id} href={`/product/${p.slug}`} className="group relative w-[68%] shrink-0 snap-start overflow-hidden rounded-2xl sm:w-[40%] md:w-[calc(20%-13px)]">
+              <Link key={p.id} href={`/product/${p.slug}`} data-cursor="view" className="group relative w-[68%] shrink-0 snap-start overflow-hidden rounded-2xl sm:w-[40%] md:w-[calc(20%-13px)]">
                 <img src={p.images[0]} alt="" className="aspect-[3/4] w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-4 text-white">
@@ -115,7 +115,7 @@ export default async function Home() {
       {promos.length > 0 && (
         <section className="grid md:grid-cols-2">
           {promos.map((b) => (
-            <Link key={b.id} href={b.ctaLink || "/shop"} className="group relative block h-[300px] overflow-hidden md:h-[420px]">
+            <Link key={b.id} data-cursor="view" href={b.ctaLink || "/shop"} className="group relative block h-[300px] overflow-hidden md:h-[420px]">
               <img src={b.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/10" />
               <div className="relative flex h-full flex-col justify-center p-8 text-white md:p-12">
@@ -217,7 +217,7 @@ export default async function Home() {
 
 function FeatureTile({ p, big = false }: { p: { slug: string; name: string; price: number; images: string[] }; big?: boolean }) {
   return (
-    <Link href={`/product/${p.slug}`} className={`group relative block overflow-hidden rounded-2xl ${big ? "h-[420px] md:h-full md:min-h-[520px]" : "h-[160px] md:h-auto md:min-h-[164px]"}`}>
+    <Link data-cursor="view" href={`/product/${p.slug}`} className={`group relative block overflow-hidden rounded-2xl ${big ? "h-[420px] md:h-full md:min-h-[520px]" : "h-[160px] md:h-auto md:min-h-[164px]"}`}>
       <img src={p.images[0]} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
       <div className="absolute bottom-0 p-5 text-white md:p-6">

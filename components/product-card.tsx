@@ -42,7 +42,7 @@ export function ProductCard({ p, list = false }: { p: CardProduct; list?: boolea
   return (
     <div className={`card group flex p-2 transition hover:shadow-card ${list ? "flex-row gap-4" : "flex-col"}`}>
       <div className={`relative overflow-hidden rounded-xl bg-cream ${list ? "w-40 shrink-0 sm:w-52" : ""}`}>
-        <Link href={`/product/${p.slug}`} className="block">
+        <Link href={`/product/${p.slug}`} className="block" data-cursor="view">
           {img ? (
             <img src={img} alt={p.name} loading="lazy" className="aspect-square w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
           ) : (

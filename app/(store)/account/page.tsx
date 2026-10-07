@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
-import { LogOut, Package } from "lucide-react";
+import { LogOut, Mail, Package, Phone, User } from "lucide-react";
 import { db, schema as s } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { logoutAction } from "@/lib/auth-actions";
@@ -20,9 +20,9 @@ export default async function Account() {
         <div className="card p-5">
           <p className="font-serif text-2xl font-semibold">Profile</p>
           <dl className="mt-3 space-y-2 text-sm">
-            <div><dt className="text-muted">Name</dt><dd>{user?.name}</dd></div>
-            <div><dt className="text-muted">Email</dt><dd>{user?.email}</dd></div>
-            <div><dt className="text-muted">Phone</dt><dd>{user?.phone || "—"}</dd></div>
+            <div className="flex gap-3"><User className="mt-0.5 h-4 w-4 text-teak" /><div><dt className="text-muted">Name</dt><dd>{user?.name}</dd></div></div>
+            <div className="flex gap-3"><Mail className="mt-0.5 h-4 w-4 text-teak" /><div><dt className="text-muted">Email</dt><dd>{user?.email}</dd></div></div>
+            <div className="flex gap-3"><Phone className="mt-0.5 h-4 w-4 text-teak" /><div><dt className="text-muted">Phone</dt><dd>{user?.phone || "—"}</dd></div></div>
           </dl>
           <div className="mt-5 flex flex-col gap-2">
             {session.role === "ADMIN" && <Link href="/admin" className="btn-dark">Open Admin Panel</Link>}

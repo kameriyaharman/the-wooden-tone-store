@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { asc, eq } from "drizzle-orm";
-import { Search } from "lucide-react";
+import { Hash, Phone, Search } from "lucide-react";
 import { db, schema as s } from "@/lib/db";
 import { PageHero } from "@/components/ui";
 import { OrderItems, Timeline, payLabel } from "@/components/order-view";
@@ -34,9 +34,9 @@ export default async function Track({ searchParams }: { searchParams: Promise<{ 
         <form className="card p-5 md:p-6" method="get">
           <h2 className="font-serif text-3xl font-semibold">Find your order</h2>
           <label className="label req mt-5" htmlFor="order">Order ID</label>
-          <input id="order" name="order" defaultValue={order} required placeholder="TWT-2026-123456" className="input uppercase" />
+          <div className="relative"><Hash className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" /><input id="order" name="order" defaultValue={order} required placeholder="TWT-2026-123456" className="input pl-9 uppercase" /></div>
           <label className="label req mt-4" htmlFor="contact">Phone / Email</label>
-          <input id="contact" name="contact" defaultValue={contact} required placeholder="+91 98xxx xxxxx" className="input" />
+          <div className="relative"><Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" /><input id="contact" name="contact" defaultValue={contact} required placeholder="+91 98xxx xxxxx" className="input pl-9" /></div>
           <button className="btn-gold mt-5 w-full"><Search className="h-4 w-4" /> Track Order</button>
           <p className="mt-3 text-xs text-muted">Your Order ID is in the confirmation email &amp; SMS.</p>
           {error && <p className="mt-4 rounded-lg bg-[#FDECEE] p-3 text-sm text-sale">{error}</p>}

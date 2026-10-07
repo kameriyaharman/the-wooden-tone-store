@@ -24,7 +24,7 @@ export function Logo({ compact = false, storeName, tagline }: { compact?: boolea
       <img src="/seed/logo.jpg" alt="" className={compact ? "h-9 w-auto" : "h-11 w-auto"} />
       {!compact && (
         <span className="hidden whitespace-nowrap leading-none sm:block">
-          <span className="block font-serif text-[22px] font-semibold text-ink">{storeName}</span>
+          <span className="block font-serif text-[19px] font-bold tracking-tight text-ink">{storeName}</span>
           <span className="mt-1 block text-[9px] font-semibold uppercase tracking-[0.3em] text-muted">{tagline}</span>
         </span>
       )}
@@ -201,7 +201,7 @@ export function Header({ rooms, storeName, tagline, whatsapp, loggedIn }: Props)
   }, [mobile]);
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
-  const pill = (on: boolean) => `whitespace-nowrap rounded-md px-3 py-1.5 text-[14px] transition ${on ? "bg-tint text-teak-dark" : "text-ink hover:text-teak-dark"}`;
+  const pill = (on: boolean) => `nav-link whitespace-nowrap rounded-md px-3 py-1.5 text-[14px] transition ${on ? "bg-tint text-teak-dark" : "text-ink hover:text-teak-dark"}`;
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-white">
@@ -210,7 +210,7 @@ export function Header({ rooms, storeName, tagline, whatsapp, loggedIn }: Props)
         <div className="lg:hidden"><Logo compact storeName={storeName} tagline={tagline} /></div>
         <div className="hidden lg:block"><Logo storeName={storeName} tagline={tagline} /></div>
 
-        <nav className="relative ml-4 hidden items-center gap-0.5 lg:flex">
+        <nav className="relative ml-6 hidden items-center gap-0.5 lg:flex">
           <Link href="/" className={pill(isActive("/") && pathname === "/")}>Home</Link>
           <div
             onMouseEnter={() => { if (closeT.current) clearTimeout(closeT.current); setMega(true); }}
@@ -233,11 +233,11 @@ export function Header({ rooms, storeName, tagline, whatsapp, loggedIn }: Props)
           <Link href="/track-order" className="hidden p-2 hover:text-teak-dark lg:block" aria-label="Track order" title="Track order"><Truck className="h-5 w-5" /></Link>
           <Link href="/wishlist" className="relative hidden p-2 hover:text-teak-dark lg:block" aria-label="Wishlist">
             <Heart className="h-5 w-5" />
-            {ready && wishlist.length > 0 && <span className="absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-teak px-1 text-[10px] font-bold text-white">{wishlist.length}</span>}
+            {ready && wishlist.length > 0 && <span key={wishlist.length} className="badge-pop absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-teak px-1 text-[10px] font-bold text-white">{wishlist.length}</span>}
           </Link>
           <button onClick={() => setDrawer(true)} className="relative p-2 hover:text-teak-dark" aria-label={`Cart, ${count} items`}>
             <ShoppingCart className="h-5 w-5" />
-            {ready && count > 0 && <span className="absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-teak px-1 text-[10px] font-bold text-white">{count}</span>}
+            {ready && count > 0 && <span key={count} className="badge-pop absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-teak px-1 text-[10px] font-bold text-white">{count}</span>}
           </button>
           <Link href={loggedIn ? "/account" : "/login"} className="hidden p-2 hover:text-teak-dark lg:block" aria-label="Account"><User className="h-5 w-5" /></Link>
         </div>

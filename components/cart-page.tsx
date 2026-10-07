@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowRight, Headphones, Heart, Lock, RefreshCw, ShoppingCart, Tag, Trash2, Truck } from "lucide-react";
+import { ArrowRight, Headphones, Heart, Lock, Receipt, RefreshCw, ShoppingCart, Tag, Trash2, Truck } from "lucide-react";
 import { useStore } from "./store-provider";
 import { FreeShipBar, QtyStepper } from "./cart-ui";
 import { Steps, getSavedCoupon, saveCoupon, useQuote } from "./checkout-shared";
@@ -38,7 +38,7 @@ export function CartPage({ freeAbove }: { freeAbove: number }) {
       <Steps step={1} />
       <div className="mt-8 grid items-start gap-6 lg:grid-cols-[1.5fr_1fr]">
         <div className="card p-5 md:p-6">
-          <h1 className="font-serif text-3xl font-semibold">Your Cart ({count} items)</h1>
+          <h1 className="flex items-center gap-3 font-serif text-3xl font-semibold"><span className="icon-chip"><ShoppingCart className="h-4 w-4" /></span>Your Cart ({count} items)</h1>
           <div className="mt-4"><FreeShipBar subtotal={sub} freeAbove={freeAbove} /></div>
           {otherError && <p className="mt-4 rounded-lg bg-[#FDECEE] p-3 text-sm text-sale">{otherError}</p>}
           <ul className="mt-2 divide-y divide-line">
@@ -68,7 +68,7 @@ export function CartPage({ freeAbove }: { freeAbove: number }) {
         </div>
         <div className="space-y-4 lg:sticky lg:top-24">
           <div className="card p-5 md:p-6">
-            <h2 className="font-serif text-3xl font-semibold">Order Summary</h2>
+            <h2 className="flex items-center gap-3 font-serif text-3xl font-semibold"><span className="icon-chip"><Receipt className="h-4 w-4" /></span>Order Summary</h2>
             <form className="mt-4 flex gap-2" onSubmit={(e) => { e.preventDefault(); const c = input.trim().toUpperCase(); setCoupon(c); saveCoupon(c); }}>
               <div className="relative flex-1">
                 <Tag className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />

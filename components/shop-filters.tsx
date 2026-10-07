@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowUpDown, ChevronUp, Filter, LayoutGrid, List, Star, X } from "lucide-react";
+import { ArrowUpDown, ChevronUp, Filter, IndianRupee, LayoutGrid, List, Percent, Star, Trees, X } from "lucide-react";
 
 type Cat = { slug: string; name: string; n: number };
 
@@ -18,12 +18,12 @@ function useQS() {
   return { sp, set };
 }
 
-function Group({ title, children }: { title: string; children: React.ReactNode }) {
+function Group({ title, children, icon: Icon }: { title: string; children: React.ReactNode; icon?: typeof Star }) {
   const [open, setOpen] = useState(true);
   return (
     <div className="border-t border-line py-5 first:border-t-0 first:pt-0">
       <button onClick={() => setOpen(!open)} className="flex w-full items-center justify-between text-sm font-bold">
-        {title} <ChevronUp className={`h-4 w-4 transition ${open ? "" : "rotate-180"}`} />
+        <span className="flex items-center gap-2">{Icon && <Icon className="h-3.5 w-3.5 text-teak" />}{title}</span> <ChevronUp className={`h-4 w-4 transition ${open ? "" : "rotate-180"}`} />
       </button>
       {open && <div className="mt-3">{children}</div>}
     </div>
@@ -46,7 +46,7 @@ export function FilterPanel({ cats, woods, onApplied }: { cats: Cat[]; woods: st
   const box = "h-4 w-4 rounded border-line accent-[#C4841D]";
   return (
     <div>
-      <Group title="Price Range">
+      <Group title="Price Range" icon={IndianRupee}>
         <div className="grid grid-cols-2 gap-2">
           <label className="text-[11px] text-muted">Min (₹)<input className="input mt-1 !py-2" inputMode="numeric" value={min} onChange={(e) => setMin(e.target.value.replace(/\D/g, ""))} /></label>
           <label className="text-[11px] text-muted">Max (₹)<input className="input mt-1 !py-2" inputMode="numeric" value={max} onChange={(e) => setMax(e.target.value.replace(/\D/g, ""))} /></label>
@@ -54,7 +54,7 @@ export function FilterPanel({ cats, woods, onApplied }: { cats: Cat[]; woods: st
         <input type="range" min={0} max={200000} step={1000} value={Number(max) || 0} onChange={(e) => setMax(e.target.value)} className="mt-3 w-full accent-[#C4841D]" aria-label="Maximum price" />
         <button onClick={() => { set({ min: min === "0" ? null : min, max: max || null }); onApplied?.(); }} className="btn-outline btn-sm mt-2 w-full">Apply Price Filter</button>
       </Group>
-      <Group title="Category">
+      <Group title="Category" icon={LayoutGrid}>
         <ul className="space-y-2.5">
           {visibleCats.map((c) => (
             <li key={c.slug}>
@@ -68,7 +68,7 @@ export function FilterPanel({ cats, woods, onApplied }: { cats: Cat[]; woods: st
         {cats.length > visibleCats.length && !showAll && <button onClick={() => setShowAll(true)} className="mt-3 text-xs font-semibold text-teak-dark">Show all {cats.length} categories</button>}
       </Group>
       {woods.length > 0 && (
-        <Group title="Wood Type">
+        <Group title="Wood Type" icon={Trees}>
           <ul className="space-y-2.5">
             {woods.map((w) => (
               <li key={w}><label className="flex cursor-pointer items-center gap-2.5 text-[13px]"><input type="checkbox" className={box} checked={selWood.includes(w)} onChange={() => toggle("wood", selWood, w)} />{w}</label></li>
@@ -76,7 +76,7 @@ export function FilterPanel({ cats, woods, onApplied }: { cats: Cat[]; woods: st
           </ul>
         </Group>
       )}
-      <Group title="Discount">
+      <Group title="Discount" icon={Percent}>
         <ul className="space-y-2.5">
           {["50", "30", "10"].map((d) => (
             <li key={d}><label className="flex cursor-pointer items-center gap-2.5 text-[13px]"><input type="radio" name="disc" className="h-4 w-4 accent-[#C4841D]" checked={sp.get("discount") === d} onChange={() => set({ discount: d })} />{d}% or more</label></li>
@@ -84,7 +84,7 @@ export function FilterPanel({ cats, woods, onApplied }: { cats: Cat[]; woods: st
           {sp.get("discount") && <li><button className="text-xs text-teak-dark" onClick={() => set({ discount: null })}>Clear</button></li>}
         </ul>
       </Group>
-      <Group title="Customer Rating">
+      <Group title="Customer Rating" icon={Star}>
         <ul className="space-y-2.5">
           {["4", "3", "2"].map((r) => (
             <li key={r}>
