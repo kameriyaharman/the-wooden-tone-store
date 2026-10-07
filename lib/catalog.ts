@@ -33,7 +33,9 @@ export type ShopQuery = {
 
 export const PAGE_SIZE = 16;
 
-export async function listProducts(q: ShopQuery) {
+export const listProducts = (q: ShopQuery) => _listCached(JSON.stringify(q));
+const _listCached = unstable_cache(async (k: string) => _listProducts(JSON.parse(k) as ShopQuery), ["list-products"], { tags: ["catalog"], revalidate: 120 });
+async function _listProducts(q: ShopQuery) {
   const where: SQL[] = [eq(s.products.active, true)];
   const catSlugs = (q.category || "").split(",").filter(Boolean);
   if (catSlugs.length) {

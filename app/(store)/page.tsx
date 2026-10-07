@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { unstable_cache } from "next/cache";
 import { and, asc, desc, eq } from "drizzle-orm";
 import { ArrowRight, Headphones, Lock, RefreshCw, Truck, MessageSquare, Star } from "lucide-react";
 import { db, schema as s } from "@/lib/db";
@@ -10,9 +11,8 @@ import { SectionHead, Paragraphs } from "@/components/ui";
 import { InstagramIcon } from "@/components/icons";
 import { inr, pctOff } from "@/lib/format";
 
-export default async function Home() {
-  const st = await getSettings();
-  const [heroes, promos, featuredCats, trending, featured, reviews, faqs, catCount] = await Promise.all([
+const homeData = unstable_cache(() =>
+  Promise.all([
     db.select().from(s.banners).where(and(eq(s.banners.placement, "HERO"), eq(s.banners.active, true))).orderBy(asc(s.banners.sortOrder)),
     db.select().from(s.banners).where(and(eq(s.banners.placement, "PROMO"), eq(s.banners.active, true))).orderBy(asc(s.banners.sortOrder)).limit(2),
     db.select().from(s.categories).where(and(eq(s.categories.featured, true), eq(s.categories.active, true))).orderBy(asc(s.categories.sortOrder)),
@@ -21,7 +21,12 @@ export default async function Home() {
     db.select().from(s.reviews).where(and(eq(s.reviews.approved, true), eq(s.reviews.showOnHome, true))).orderBy(desc(s.reviews.createdAt)).limit(8),
     db.select().from(s.faqs).where(eq(s.faqs.active, true)).orderBy(asc(s.faqs.sortOrder)),
     db.$count(s.categories, eq(s.categories.active, true)),
-  ]);
+  ]),
+  ["home-data"], { tags: ["catalog", "settings"], revalidate: 120 });
+
+export default async function Home() {
+  const st = await getSettings();
+  const [heroes, promos, featuredCats, trending, featured, reviews, faqs, catCount] = await homeData();
   const rows = await Promise.all((st.homeSections || []).map(async (sec) => ({ sec, items: (await listProducts({ category: sec.categories.join(",") })).items })));
   const spot = featured[0];
   const insta = (st as { instagramImages?: string[] }).instagramImages?.length

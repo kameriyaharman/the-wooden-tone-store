@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { unstable_cache } from "next/cache";
 import { and, desc, eq, ne } from "drizzle-orm";
 import { db, schema as s } from "@/lib/db";
 import { cardCols } from "@/lib/catalog";
@@ -22,9 +23,26 @@ const specIcon = (label: string) => {
   return Layers;
 };
 
-async function getProduct(slug: string) {
-  return db.query.products.findFirst({ where: and(eq(s.products.slug, slug), eq(s.products.active, true)), with: { category: true } });
-}
+const getProduct = unstable_cache(
+  async (slug: string) => (await db.query.products.findFirst({ where: and(eq(s.products.slug, slug), eq(s.products.active, true)), with: { category: true } })) ?? null,
+  ["product-by-slug"], { tags: ["catalog"], revalidate: 120 },
+);
+
+const getExtras = unstable_cache(
+  async (id: string, categoryId: string | null) => {
+    const [related, reviews] = await Promise.all([
+      categoryId
+        ? db.select(cardCols).from(s.products).where(and(eq(s.products.categoryId, categoryId), eq(s.products.active, true), ne(s.products.id, id))).limit(5)
+        : Promise.resolve([]),
+      db.select().from(s.reviews).where(and(eq(s.reviews.productId, id), eq(s.reviews.approved, true))).orderBy(desc(s.reviews.createdAt)).limit(20),
+    ]);
+    const more = related.length < 5
+      ? await db.select(cardCols).from(s.products).where(and(eq(s.products.active, true), ne(s.products.id, id), eq(s.products.trending, true))).limit(5 - related.length)
+      : [];
+    return { related, reviews, more };
+  },
+  ["product-extras"], { tags: ["catalog"], revalidate: 120 },
+);
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const p = await getProduct((await params).slug);
@@ -36,15 +54,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const p = await getProduct((await params).slug);
   if (!p) notFound();
   const st = await getSettings();
-  const [related, reviews] = await Promise.all([
-    p.categoryId
-      ? db.select(cardCols).from(s.products).where(and(eq(s.products.categoryId, p.categoryId), eq(s.products.active, true), ne(s.products.id, p.id))).limit(5)
-      : Promise.resolve([]),
-    db.select().from(s.reviews).where(and(eq(s.reviews.productId, p.id), eq(s.reviews.approved, true))).orderBy(desc(s.reviews.createdAt)).limit(20),
-  ]);
-  const more = related.length < 5
-    ? await db.select(cardCols).from(s.products).where(and(eq(s.products.active, true), ne(s.products.id, p.id), eq(s.products.trending, true))).limit(5 - related.length)
-    : [];
+  const { related, reviews, more } = await getExtras(p.id, p.categoryId);
   const recs = [...related, ...more.filter((m) => !related.some((r) => r.id === m.id))];
   const defSize = p.sizes.find((x) => x.priceDelta === 0) || p.sizes[0];
   const specLine = [p.woodType && `${p.woodType} Wood`, defSize && `${defSize.name} Size`].filter(Boolean).join(" · ");

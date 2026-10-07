@@ -1,6 +1,7 @@
 import "server-only";
 import { db, schema as s } from "./db";
 import { and, eq, inArray, sql } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { getSettings } from "./settings";
 import type { Finish, SizeOpt } from "./db/schema";
 
@@ -105,6 +106,7 @@ export async function confirmOrder(orderId: string, opts: { paid: boolean; payme
     }
     await tx.update(s.orders).set(patch).where(eq(s.orders.id, orderId));
   });
+  try { revalidateTag("catalog"); } catch {}
 }
 
 export async function markPaymentFailed(orderId: string) {
@@ -121,4 +123,5 @@ export async function restockOrder(orderId: string) {
       if (it.productId) await tx.update(s.products).set({ stock: sql`${s.products.stock} + ${it.qty}` }).where(eq(s.products.id, it.productId));
     await tx.update(s.orders).set({ stockDeducted: false }).where(eq(s.orders.id, orderId));
   });
+  try { revalidateTag("catalog"); } catch {}
 }
