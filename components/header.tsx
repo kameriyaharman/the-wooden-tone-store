@@ -20,7 +20,7 @@ const NAV = [
 
 export function Logo({ compact = false, storeName, tagline }: { compact?: boolean; storeName: string; tagline: string }) {
   return (
-    <Link href="/" className="flex items-center gap-2.5" aria-label={storeName}>
+    <Link href="/" className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-teak/40" aria-label={storeName}>
       <img src="/seed/logo.png" alt="" className={compact ? "h-9 w-auto" : "h-11 w-auto"} />
       {!compact && (
         <span className="hidden whitespace-nowrap leading-none sm:block">

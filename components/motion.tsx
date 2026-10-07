@@ -3,7 +3,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const REVEAL_SELECTOR = [
-  "main section",
   "main .card",
   "main h1",
   "main h2",
@@ -25,7 +24,7 @@ export function ScrollReveal() {
           }
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.06 },
+      { rootMargin: "0px 0px 20% 0px", threshold: 0 },
     );
     const scan = () => {
       const vh = window.innerHeight;
@@ -33,7 +32,7 @@ export function ScrollReveal() {
         if (el.dataset.revealed) return;
         el.dataset.revealed = "1";
         // anything already on screen is shown immediately (no flash on first paint)
-        if (el.getBoundingClientRect().top < vh * 0.92) {
+        if (el.getBoundingClientRect().top < vh * 1.1) {
           el.classList.add("reveal", "in");
           return;
         }
@@ -42,16 +41,29 @@ export function ScrollReveal() {
         const parent = el.parentElement;
         if (parent) {
           const idx = Array.from(parent.children).indexOf(el);
-          el.style.transitionDelay = `${Math.min(idx, 6) * 60}ms`;
+          el.style.transitionDelay = `${Math.min(idx, 4) * 40}ms`;
         }
         io.observe(el);
       });
     };
     scan();
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        const limit = window.innerHeight * 1.05;
+        document.querySelectorAll<HTMLElement>(".reveal:not(.in)").forEach((el) => {
+          if (el.getBoundingClientRect().top < limit) el.classList.add("in");
+        });
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
     const mo = new MutationObserver(() => scan());
     const main = document.querySelector("main");
     if (main) mo.observe(main, { childList: true, subtree: true });
-    return () => { io.disconnect(); mo.disconnect(); };
+    return () => { io.disconnect(); mo.disconnect(); window.removeEventListener("scroll", onScroll); };
   }, [pathname]);
   return null;
 }
