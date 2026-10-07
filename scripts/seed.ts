@@ -150,10 +150,29 @@ export async function seedCatalog() {
   }
 }
 
+// Old placeholder values: if a store still has these, replace them with the real defaults.
+const PLACEHOLDERS: Record<string, unknown[]> = {
+  phone: ["+91 00000 00000"],
+  whatsapp: ["910000000000"],
+  email: ["hello@thewoodentone.com"],
+  address: ["Showroom address — update in Admin → Settings"],
+  mapEmbedUrl: [""],
+  mapLink: [""],
+};
+
 export async function seedEssentials() {
   for (const [key, value] of Object.entries(DEFAULT_SETTINGS)) {
     await db.insert(s.settings).values({ key, value }).onConflictDoNothing();
   }
+  for (const [key, olds] of Object.entries(PLACEHOLDERS)) {
+    const row = await db.query.settings.findFirst({ where: eq(s.settings.key, key) });
+    if (row && olds.some((o) => String(o) === String(row.value)))
+      await db.update(s.settings).set({ value: (DEFAULT_SETTINGS as Record<string, unknown>)[key] }).where(eq(s.settings.key, key));
+  }
+  // remove the guessed Instagram link from the first version
+  const soc = await db.query.settings.findFirst({ where: eq(s.settings.key, "social") });
+  const sv = soc?.value as Record<string, string> | undefined;
+  if (sv && sv.instagram === "https://instagram.com/thewoodentone") await db.update(s.settings).set({ value: { ...sv, instagram: "", youtube: sv.youtube || "" } }).where(eq(s.settings.key, "social"));
   const adminEmail = (process.env.ADMIN_EMAIL || "admin@thewoodentone.com").toLowerCase();
   const adminPass = process.env.ADMIN_PASSWORD || "ChangeMe@123";
   const existing = await db.query.users.findFirst({ where: eq(s.users.email, adminEmail) });

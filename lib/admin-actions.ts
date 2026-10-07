@@ -337,7 +337,7 @@ export async function saveSettingsAction(fd: FormData) {
   // checkboxes (unchecked boxes are not submitted)
   for (const k of str(fd, "_bools").split(",").filter(Boolean)) patch[k] = fd.get(k) === "on";
   // social links
-  if (fd.has("social_instagram")) patch.social = { ...cur.social, facebook: str(fd, "social_facebook"), instagram: str(fd, "social_instagram"), x: str(fd, "social_x"), linkedin: str(fd, "social_linkedin") };
+  if (fd.has("social_instagram")) patch.social = { ...cur.social, facebook: str(fd, "social_facebook"), instagram: str(fd, "social_instagram"), x: str(fd, "social_x"), linkedin: str(fd, "social_linkedin"), youtube: str(fd, "social_youtube") };
   patch.whatsapp = patch.whatsapp !== undefined ? String(patch.whatsapp).replace(/\D/g, "") : undefined;
   await saveSettings(patch);
   refresh();

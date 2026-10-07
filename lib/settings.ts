@@ -7,6 +7,8 @@ export const getSettings = cache(async (): Promise<Settings> => {
   const rows = await db.select().from(schema.settings);
   const out: Record<string, unknown> = { ...DEFAULT_SETTINGS };
   for (const r of rows) out[r.key] = r.value;
+  // numeric-looking strings can come back as numbers from jsonb; keep text fields as text
+  for (const k of ["phone", "whatsapp", "email", "address", "phonepeClientVersion"]) if (out[k] != null) out[k] = String(out[k]);
   return out as Settings;
 });
 

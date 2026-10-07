@@ -63,6 +63,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
                 <Field label="Facebook"><input name="social_facebook" defaultValue={st.social?.facebook} className="input" /></Field>
                 <Field label="X / Twitter"><input name="social_x" defaultValue={st.social?.x} className="input" /></Field>
                 <Field label="LinkedIn"><input name="social_linkedin" defaultValue={st.social?.linkedin} className="input" /></Field>
+                <Field label="YouTube"><input name="social_youtube" defaultValue={(st.social as { youtube?: string })?.youtube} className="input" /></Field>
                 <Field label="Instagram handle (shown on home)"><input name="instagramHandle" defaultValue={st.instagramHandle} className="input" /></Field>
               </div>
             </Panel>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
-import { FacebookIcon, InstagramIcon, LinkedinIcon, XIcon } from "./icons";
+import { FacebookIcon, InstagramIcon, LinkedinIcon, XIcon, YoutubeIcon } from "./icons";
 import { Newsletter } from "./newsletter";
 import type { PublicSettings } from "@/lib/settings";
 
@@ -10,6 +10,7 @@ export function Footer({ st }: { st: PublicSettings }) {
     { href: st.social?.instagram, Icon: InstagramIcon, label: "Instagram" },
     { href: st.social?.x, Icon: XIcon, label: "X" },
     { href: st.social?.linkedin, Icon: LinkedinIcon, label: "LinkedIn" },
+    { href: (st.social as { youtube?: string })?.youtube, Icon: YoutubeIcon, label: "YouTube" },
   ].filter((x) => x.href);
   const col = "font-serif text-xl font-semibold text-white";
   const lnk = "block py-1.5 text-[13px] text-white/70 transition-all duration-300 hover:translate-x-1 hover:text-teak-light";
@@ -63,7 +64,7 @@ export function Footer({ st }: { st: PublicSettings }) {
           <div>
             <p className={col}>Contact</p>
             <ul className="mt-4 space-y-3 text-[13px] text-white/75">
-              <li className="flex gap-2.5"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-teak" />{st.address}</li>
+              <li>{st.mapLink ? <a href={st.mapLink} target="_blank" rel="noreferrer" className="flex gap-2.5 hover:text-white"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-teak" />{st.address}</a> : <span className="flex gap-2.5"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-teak" />{st.address}</span>}</li>
               <li><a href={`tel:${st.phone.replace(/\s/g, "")}`} className="flex gap-2.5 hover:text-white"><Phone className="h-4 w-4 shrink-0 text-teak" />{st.phone}</a></li>
               <li><a href={`mailto:${st.email}`} className="flex gap-2.5 hover:text-white"><Mail className="h-4 w-4 shrink-0 text-teak" />{st.email}</a></li>
               <li className="flex gap-2.5"><Clock className="h-4 w-4 shrink-0 text-teak" />{st.hours}</li>
