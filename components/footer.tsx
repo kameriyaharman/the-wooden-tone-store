@@ -72,7 +72,7 @@ export function Footer({ st }: { st: PublicSettings }) {
           </div>
         </div>
         <div className="container-site flex flex-col items-center gap-4 border-t border-white/10 py-6 text-xs text-white/60 md:flex-row md:justify-between">
-          <p>© {new Date().getFullYear()} {st.storeName}. All rights reserved.</p>
+          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 md:justify-start"><span>© {new Date().getFullYear()} {st.storeName}. All rights reserved.</span><span aria-hidden className="text-white/30">·</span><span>Developed by <span className="font-bold text-teak-light">Custom E Solution</span></span></p>
           <div className="flex flex-wrap justify-center gap-1.5">
             {["VISA", "MASTERCARD", "UPI", "PAYTM", "PHONEPE", "COD"].map((m) => (
               <span key={m} className="rounded border border-white/15 bg-white/5 px-2 py-1 text-[10px] font-bold tracking-wide text-white/80">{m}</span>
