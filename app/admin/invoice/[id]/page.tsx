@@ -16,7 +16,7 @@ export default async function Invoice({ params }: { params: Promise<{ id: string
     <div className="mx-auto max-w-3xl bg-white p-8 text-sm text-ink print:p-0">
       <div className="mb-6 flex justify-end print:hidden"><PrintButton /></div>
       <div className="flex items-start justify-between border-b border-line pb-5">
-        <div className="flex items-center gap-3"><img src="/seed/logo.jpg" alt="" className="h-14" /><div><p className="font-serif text-2xl font-semibold">{st.storeName}</p><p className="text-xs text-muted">{st.address}<br />{st.phone} · {st.email}</p></div></div>
+        <div className="flex items-center gap-3"><img src="/seed/logo.png" alt="" className="h-14" /><div><p className="font-serif text-2xl font-semibold">{st.storeName}</p><p className="text-xs text-muted">{st.address}<br />{st.phone} · {st.email}</p></div></div>
         <div className="text-right"><p className="font-serif text-3xl font-semibold">Invoice</p><p className="text-xs text-muted">#{o.orderNo}<br />{fmtDate(o.createdAt)}</p></div>
       </div>
       <div className="grid grid-cols-2 gap-6 py-5">

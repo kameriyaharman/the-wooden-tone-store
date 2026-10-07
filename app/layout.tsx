@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: st?.seoTitle || "The Wooden Tone", template: `%s · ${st?.storeName || "The Wooden Tone"}` },
     description: st?.seoDescription,
     metadataBase: new URL(process.env.SITE_URL || "http://localhost:3000"),
-    icons: { icon: "/seed/logo.jpg" },
+    icons: { icon: "/seed/logo-square.png" },
   };
 }
 export const viewport: Viewport = { themeColor: "#3A2411", width: "device-width", initialScale: 1 };

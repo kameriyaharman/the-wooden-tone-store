@@ -21,7 +21,7 @@ const NAV = [
 export function Logo({ compact = false, storeName, tagline }: { compact?: boolean; storeName: string; tagline: string }) {
   return (
     <Link href="/" className="flex items-center gap-2.5" aria-label={storeName}>
-      <img src="/seed/logo.jpg" alt="" className={compact ? "h-9 w-auto" : "h-11 w-auto"} />
+      <img src="/seed/logo.png" alt="" className={compact ? "h-9 w-auto" : "h-11 w-auto"} />
       {!compact && (
         <span className="hidden whitespace-nowrap leading-none sm:block">
           <span className="block font-serif text-[19px] font-bold tracking-tight text-ink">{storeName}</span>
@@ -154,7 +154,7 @@ function MobileMenu({ rooms, onClose, whatsapp, storeName, tagline }: { rooms: N
       <aside className="absolute left-0 top-0 flex h-full w-[86%] max-w-[360px] flex-col overflow-y-auto bg-white">
         <div className="flex items-center justify-between border-b border-line px-4 py-3">
           <div className="flex items-center gap-2">
-            <img src="/seed/logo.jpg" alt="" className="h-9" />
+            <img src="/seed/logo.png" alt="" className="h-9" />
             <span className="font-serif text-lg font-semibold">{storeName}</span>
           </div>
           <button onClick={onClose} aria-label="Close menu" className="p-1"><X className="h-5 w-5" /></button>

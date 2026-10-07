@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <aside className="sticky top-0 z-30 bg-walnut text-white lg:h-screen lg:overflow-y-auto">
         <div className="flex items-center justify-between gap-3 px-5 py-4">
           <div className="flex items-center gap-2.5">
-            <img src="/seed/logo.jpg" alt="" className="h-9 rounded bg-white p-0.5" />
+            <img src="/seed/logo.png" alt="" className="h-9 rounded bg-white p-0.5" />
             <div className="leading-tight"><p className="font-serif text-lg font-semibold">Wooden Tone</p><p className="text-[10px] uppercase tracking-widest text-white/60">Admin</p></div>
           </div>
           <form action={logoutAction} className="lg:hidden"><button aria-label="Logout"><LogOut className="h-4 w-4" /></button></form>

@@ -34,7 +34,7 @@ export async function openRazorpay(rz: RzpData, orderNo: string, onDone: (ok: bo
   if (!ok || !window.Razorpay) return onDone(false);
   const r = new window.Razorpay({
     key: rz.key, order_id: rz.orderId, amount: rz.amount, currency: "INR", name: rz.name, description: `Order ${orderNo}`,
-    image: `${window.location.origin}/seed/logo.jpg`, prefill: rz.prefill, theme: { color: "#C4841D" },
+    image: `${window.location.origin}/seed/logo-square.png`, prefill: rz.prefill, theme: { color: "#C4841D" },
     handler: async (resp: Record<string, string>) => {
       const v = await fetch("/api/payment/razorpay/verify", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ orderNo, ...resp }) }).then((x) => x.json()).catch(() => ({ ok: false }));
       onDone(!!v.ok);

@@ -19,7 +19,7 @@ export function Footer({ st }: { st: PublicSettings }) {
       <div className="bg-walnut text-white">
         <div className="container-site grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.3fr]">
           <div>
-            <img src="/seed/logo.jpg" alt={st.storeName} className="h-14 rounded-lg bg-white p-1" />
+            <img src="/seed/logo.png" alt={st.storeName} className="h-14 rounded-xl bg-white p-2" />
             <p className="mt-4 max-w-[260px] text-[13px] leading-relaxed text-white/70">{st.footerAbout}</p>
             <div className="mt-5 flex gap-2.5">
               {social.map(({ href, Icon, label }) => (
