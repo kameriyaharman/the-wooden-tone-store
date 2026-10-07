@@ -1,5 +1,5 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { and, eq, sql } from "drizzle-orm";
 import bcrypt from "bcryptjs";
@@ -22,7 +22,7 @@ const json = <T,>(fd: FormData, k: string, d: T): T => {
   try { return JSON.parse(str(fd, k) || "null") ?? d; } catch { return d; }
 };
 const lines = (fd: FormData, k: string) => str(fd, k).split("\n").map((x) => x.trim()).filter(Boolean);
-const refresh = () => revalidatePath("/", "layout");
+const refresh = () => { revalidateTag("settings"); revalidateTag("catalog"); revalidatePath("/", "layout"); };
 
 async function uniqueSlug(table: typeof s.products | typeof s.categories, base: string, exceptId?: string) {
   let slug = slugify(base) || "item";

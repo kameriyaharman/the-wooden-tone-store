@@ -56,6 +56,7 @@ function SearchBox({ onDone, autoFocus }: { onDone?: () => void; autoFocus?: boo
         if (!q.trim()) return;
         setOpen(false);
         onDone?.();
+        window.dispatchEvent(new Event("twt:navstart"));
         router.push(`/shop?q=${encodeURIComponent(q.trim())}`);
       }}
     >

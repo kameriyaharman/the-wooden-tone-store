@@ -1,6 +1,7 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { navStart } from "./nav-progress";
 import { ArrowUpDown, ChevronUp, Filter, IndianRupee, LayoutGrid, List, Percent, Star, Trees, X } from "lucide-react";
 
 type Cat = { slug: string; name: string; n: number };
@@ -13,6 +14,7 @@ function useQS() {
     const q = new URLSearchParams(sp.toString());
     for (const [k, v] of Object.entries(patch)) (v === null || v === "" ? q.delete(k) : q.set(k, v));
     if (!("page" in patch)) q.delete("page");
+    navStart();
     router.push(`${pathname}?${q.toString()}`, { scroll: false });
   };
   return { sp, set };
@@ -151,7 +153,7 @@ export function ActiveChips({ catNames }: { catNames: Record<string, string> }) 
 export function ClearAll() {
   const router = useRouter();
   const pathname = usePathname();
-  return <button onClick={() => router.push(pathname)} className="text-xs font-semibold text-teak-dark">Clear all</button>;
+  return <button onClick={() => { navStart(); router.push(pathname); }} className="text-xs font-semibold text-teak-dark">Clear all</button>;
 }
 
 export function MobileFilterBar({ cats, woods, count }: { cats: Cat[]; woods: string[]; count: number }) {

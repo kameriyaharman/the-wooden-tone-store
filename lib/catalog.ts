@@ -1,6 +1,7 @@
 import "server-only";
 import { db, schema as s } from "./db";
 import { and, asc, desc, eq, gte, ilike, inArray, lte, or, sql, type SQL } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 
 export const cardCols = {
   id: s.products.id,
@@ -70,7 +71,8 @@ export async function listProducts(q: ShopQuery) {
   return { items, total: n, page, pages: Math.max(1, Math.ceil(n / PAGE_SIZE)) };
 }
 
-export async function categoryCounts() {
+export const categoryCounts = unstable_cache(_categoryCounts, ["category-counts"], { tags: ["catalog"], revalidate: 300 });
+async function _categoryCounts() {
   return db
     .select({
       id: s.categories.id, name: s.categories.name, slug: s.categories.slug,
@@ -79,16 +81,18 @@ export async function categoryCounts() {
     .from(s.categories).where(eq(s.categories.active, true)).orderBy(asc(s.categories.name));
 }
 
-export async function woodTypes() {
+export const woodTypes = unstable_cache(_woodTypes, ["wood-types"], { tags: ["catalog"], revalidate: 300 });
+async function _woodTypes() {
   const rows = await db.selectDistinct({ w: s.products.woodType }).from(s.products).where(eq(s.products.active, true));
   return rows.map((r) => r.w).filter(Boolean).sort() as string[];
 }
 
-export async function navData() {
+export const navData = unstable_cache(_navData, ["nav-data"], { tags: ["catalog"], revalidate: 300 });
+async function _navData() {
   const rooms = await db.query.rooms.findMany({
     orderBy: asc(s.rooms.sortOrder),
     with: { categories: { where: eq(s.categories.active, true), orderBy: asc(s.categories.name), columns: { name: true, slug: true, image: true } } },
   });
   return rooms.map((r) => ({ name: r.name, slug: r.slug, image: r.image, description: r.description, categories: r.categories }));
 }
-export type NavRoom = Awaited<ReturnType<typeof navData>>[number];
+export type NavRoom = Awaited<ReturnType<typeof _navData>>[number];

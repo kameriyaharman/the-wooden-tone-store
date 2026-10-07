@@ -6,6 +6,7 @@ import { Banknote, CreditCard, Loader2, Lock, MapPin, Receipt, ShieldCheck, Shop
 import { useStore } from "./store-provider";
 import { Steps, getSavedCoupon, useQuote } from "./checkout-shared";
 import { inr, INDIAN_STATES } from "@/lib/format";
+import { navStart } from "./nav-progress";
 
 type Methods = { razorpay: boolean; phonepe: boolean; cod: boolean; codFee: number; codMax: number };
 type Addr = { firstName: string; lastName: string; email: string; phone: string; line1: string; city: string; state: string; pincode: string; landmark: string };
@@ -121,6 +122,7 @@ export function CheckoutPage({ methods, loggedIn, user, savedAddr }: { methods: 
       });
       return;
     }
+    navStart();
     clear();
     router.push(d.redirect);
   };

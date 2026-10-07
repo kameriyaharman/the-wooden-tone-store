@@ -1,10 +1,13 @@
 import "server-only";
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { db, schema } from "./db";
 import { DEFAULT_SETTINGS, SECRET_KEYS, type Settings } from "./defaults";
 
+const loadRows = unstable_cache(async () => db.select().from(schema.settings), ["settings-rows"], { tags: ["settings"], revalidate: 300 });
+
 export const getSettings = cache(async (): Promise<Settings> => {
-  const rows = await db.select().from(schema.settings);
+  const rows = await loadRows();
   const out: Record<string, unknown> = { ...DEFAULT_SETTINGS };
   for (const r of rows) out[r.key] = r.value;
   // numeric-looking strings can come back as numbers from jsonb; keep text fields as text

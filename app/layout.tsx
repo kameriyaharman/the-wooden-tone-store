@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { getSettings } from "@/lib/settings";
+import { NavProgress } from "@/components/nav-progress";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +20,10 @@ export const viewport: Viewport = { themeColor: "#3A2411", width: "device-width"
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Suspense><NavProgress /></Suspense>
+        {children}
+      </body>
     </html>
   );
 }

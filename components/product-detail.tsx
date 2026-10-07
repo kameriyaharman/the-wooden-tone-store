@@ -6,6 +6,7 @@ import { useStore } from "./store-provider";
 import { QtyStepper } from "./cart-ui";
 import { Stars } from "./product-card";
 import { inr, pctOff } from "@/lib/format";
+import { navStart } from "./nav-progress";
 import type { Finish, SizeOpt } from "@/lib/db/schema";
 
 type P = {
@@ -77,7 +78,7 @@ export function BuyBox({ p, specLine }: { p: P; specLine: string }) {
   const actions = (compact = false) => (
     <div className={`grid gap-2.5 ${compact ? "grid-cols-2" : "grid-cols-[1fr_1fr_auto_auto]"}`}>
       <button disabled={out} onClick={() => add(item)} className="btn-gold"><ShoppingCart className="h-4 w-4" /> Add to Cart</button>
-      <button disabled={out} onClick={() => { add(item, false); router.push("/checkout"); }} className="btn-dark">Buy Now</button>
+      <button disabled={out} onClick={() => { add(item, false); navStart(); router.push("/checkout"); }} className="btn-dark">Buy Now</button>
       {!compact && (
         <>
           <button onClick={() => toggleWish({ productId: p.id, slug: p.slug, name: p.name, image: p.images[0] || null, price: p.price, mrp: p.mrp })} className="btn-outline !px-3.5" aria-label="Wishlist"><Heart className={`h-4 w-4 ${wished ? "fill-sale text-sale" : ""}`} /></button>
@@ -159,7 +160,7 @@ export function BuyBox({ p, specLine }: { p: P; specLine: string }) {
           {mrp > price && <p className="text-xs text-muted line-through">{inr(mrp)}</p>}
         </div>
         <button disabled={out} onClick={() => add(item)} className="btn-gold !px-4"><ShoppingCart className="h-4 w-4" /> Add</button>
-        <button disabled={out} onClick={() => { add(item, false); router.push("/checkout"); }} className="btn-dark !px-4">Buy Now</button>
+        <button disabled={out} onClick={() => { add(item, false); navStart(); router.push("/checkout"); }} className="btn-dark !px-4">Buy Now</button>
       </div>
     </div>
   );
