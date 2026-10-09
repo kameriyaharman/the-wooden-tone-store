@@ -56,6 +56,7 @@ export const products = pgTable("products", {
   woodType: text("wood_type"),
   categoryId: text("category_id").references(() => categories.id, { onDelete: "set null" }),
   images: text("images").array().notNull().default([]),
+  video: text("video"),
   finishes: jsonb("finishes").$type<Finish[]>().notNull().default([]),
   sizes: jsonb("sizes").$type<SizeOpt[]>().notNull().default([]),
   specs: jsonb("specs").$type<Spec[]>().notNull().default([]),

@@ -79,7 +79,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Breadcrumbs items={[{ href: "/", label: "Home" }, { href: "/shop", label: "Shop" }, ...(p.category ? [{ href: `/shop?category=${p.category.slug}`, label: p.category.name }] : []), { label: p.name.replace(/^The Wooden Tone /, "") }]} />
       <div className="mt-6 grid items-start gap-8 lg:grid-cols-[1.05fr_1fr]">
-        <div className="lg:sticky lg:top-24"><Gallery images={p.images} name={p.name} /></div>
+        <div className="lg:sticky lg:top-24"><Gallery images={p.images} video={p.video} name={p.name} /></div>
         <BuyBox
           p={{ id: p.id, slug: p.slug, name: p.name, price: p.price, mrp: p.mrp, images: p.images, stock: p.stock, woodType: p.woodType, finishes: p.finishes, sizes: p.sizes, shipsIn: p.shipsIn, ratingAvg: p.ratingAvg, ratingCount: p.ratingCount }}
           specLine={specLine}

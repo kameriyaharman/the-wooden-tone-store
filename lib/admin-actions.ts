@@ -54,6 +54,7 @@ export async function saveProduct(fd: FormData) {
     woodType: opt(fd, "woodType"),
     categoryId: opt(fd, "categoryId"),
     images: json<string[]>(fd, "images", []),
+    video: opt(fd, "video"),
     finishes: json<Finish[]>(fd, "finishes", []).filter((f) => f.name),
     sizes: json<SizeOpt[]>(fd, "sizes", []).filter((f) => f.name).map((x) => ({ ...x, label: x.label || x.name, priceDelta: Number(x.priceDelta) || 0 })),
     specs: json<Spec[]>(fd, "specs", []).filter((f) => f.label && f.value),

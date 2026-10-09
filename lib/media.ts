@@ -17,3 +17,16 @@ export async function saveUpload(file: File, opts: { maxWidth?: number } = {}) {
   const [row] = await db.insert(s.media).values({ filename: file.name.slice(0, 200), mime, size: buf.length, data: buf }).returning({ id: s.media.id });
   return `/media/${row.id}`;
 }
+
+const VIDEO_OK = ["video/mp4", "video/webm", "video/quicktime"];
+export const VIDEO_MAX_MB = 50;
+
+/** Stores a product video as-is (no transcoding). MP4 (H.264) plays everywhere; MOV/WEBM depend on the browser. */
+export async function saveVideo(file: File) {
+  if (!file || !file.size) throw new Error("Empty file");
+  if (!VIDEO_OK.includes(file.type)) throw new Error("Only MP4, WEBM or MOV videos are allowed");
+  if (file.size > VIDEO_MAX_MB * 1024 * 1024) throw new Error(`Video is larger than ${VIDEO_MAX_MB} MB — please compress it first`);
+  const buf = Buffer.from(await file.arrayBuffer());
+  const [row] = await db.insert(s.media).values({ filename: file.name.slice(0, 200), mime: file.type, size: buf.length, data: buf }).returning({ id: s.media.id });
+  return `/media/${row.id}`;
+}

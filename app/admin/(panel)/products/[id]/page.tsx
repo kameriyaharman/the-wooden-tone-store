@@ -4,7 +4,7 @@ import { asc, eq } from "drizzle-orm";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { db, schema as s } from "@/lib/db";
 import { AdminHeader, Check, Field, Panel } from "@/components/admin/ui";
-import { ImageList, Repeater, SlugField, Submit } from "@/components/admin/inputs";
+import { ImageList, Repeater, SlugField, Submit, VideoField } from "@/components/admin/inputs";
 import { deleteProduct, saveProduct } from "@/lib/admin-actions";
 
 export default async function ProductForm({ params }: { params: Promise<{ id: string }> }) {
@@ -33,6 +33,9 @@ export default async function ProductForm({ params }: { params: Promise<{ id: st
           </Panel>
           <Panel title="Images" actions={<span className="text-xs text-muted">First image is the main photo. Drag &amp; drop or click to upload.</span>}>
             <ImageList name="images" initial={p?.images || []} />
+          </Panel>
+          <Panel title="Product video" actions={<span className="text-xs text-muted">Optional · shows in the product gallery</span>}>
+            <VideoField name="video" initial={p?.video || ""} />
           </Panel>
           <Panel title="Options">
             <p className="label">Finishes (colour swatches)</p>
