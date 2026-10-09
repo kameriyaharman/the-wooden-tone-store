@@ -16,19 +16,19 @@ export function HeroSlider({ slides, marquee, spotlight }: { slides: Slide[]; ma
   const words = [...marquee, ...marquee, ...marquee, ...marquee];
   return (
     <section className="relative bg-[#1d1611] text-white">
-      <div className="relative h-[540px] overflow-hidden md:h-[600px]">
+      <div className="relative h-[420px] overflow-hidden md:h-[460px]">
         {slides.map((s, k) => (
           <div key={s.id} className={`absolute inset-0 transition-opacity duration-700 ${k === i ? "opacity-100" : "pointer-events-none opacity-0"}`} aria-hidden={k !== i}>
             <img src={s.image} alt="" className={`absolute inset-0 h-full w-full object-cover ${k === i ? "kenburns" : ""}`} />
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/10" />
-            <div className="container-site relative flex h-full flex-col justify-center pb-16">
+            <div className="container-site relative flex h-full flex-col justify-center pb-14">
               {s.eyebrow && <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#E9B85E]">{s.eyebrow}</p>}
-              <h1 className="h-display mt-4 max-w-2xl text-[46px] md:text-[76px]">
+              <h1 className="h-display mt-3 max-w-2xl text-[38px] md:text-[60px]">
                 {s.title}
                 {s.highlight && <><br /><em className="font-medium text-[#E9B85E]">{s.highlight}</em></>}
               </h1>
-              {s.subtitle && <p className="mt-4 max-w-md text-[15px] text-white/85">{s.subtitle}</p>}
-              <div className="mt-7 flex flex-wrap gap-3">
+              {s.subtitle && <p className="mt-3 max-w-md text-[15px] text-white/85">{s.subtitle}</p>}
+              <div className="mt-6 flex flex-wrap gap-3">
                 {s.ctaLabel && s.ctaLink && <Link href={s.ctaLink} className="btn-gold">{s.ctaLabel} <ArrowRight className="h-4 w-4" /></Link>}
                 {s.cta2Label && s.cta2Link && <Link href={s.cta2Link} className="btn border border-white/60 text-white hover:bg-white/10">{s.cta2Label}</Link>}
               </div>
@@ -46,7 +46,7 @@ export function HeroSlider({ slides, marquee, spotlight }: { slides: Slide[]; ma
           </Link>
         )}
         {n > 1 && (
-          <div className="container-site pointer-events-none absolute inset-x-0 bottom-20 flex items-center justify-between">
+          <div className="container-site pointer-events-none absolute inset-x-0 bottom-16 flex items-center justify-between">
             <div className="pointer-events-auto flex gap-1.5">
               {slides.map((_, k) => (
                 <button key={k} onClick={() => setI(k)} aria-label={`Slide ${k + 1}`} className={`h-1.5 rounded-full transition-all ${k === i ? "w-7 bg-white" : "w-1.5 bg-white/50"}`} />
@@ -59,7 +59,7 @@ export function HeroSlider({ slides, marquee, spotlight }: { slides: Slide[]; ma
           </div>
         )}
         <div className="absolute inset-x-0 bottom-0 overflow-hidden border-t border-white/10 bg-[#1d1611]/90">
-          <div className="flex w-max animate-marquee gap-10 whitespace-nowrap py-4 font-serif text-lg uppercase tracking-[0.3em] text-white/90">
+          <div className="flex w-max animate-marquee gap-10 whitespace-nowrap py-3 font-serif text-lg uppercase tracking-[0.3em] text-white/90">
             {words.map((w, k) => <span key={k} className="flex items-center gap-10">{w}<span className="text-teak">✦</span></span>)}
           </div>
         </div>

@@ -41,6 +41,43 @@ export default async function Home() {
         spotlight={spot ? { name: spot.name.replace(/^The Wooden Tone /, ""), slug: spot.slug, price: inr(spot.price), image: spot.images[0], label: `Bestseller · ${pctOff(spot.price, spot.mrp)}% off` } : null}
       />
 
+      {/* Trending */}
+      {trending.length > 0 && (
+        <section className="container-site py-16 md:py-20">
+          <div className="flex items-end justify-between">
+            <SectionHead eyebrow="Now trending" title="Pieces worth lingering on" sub="Our most-loved designs this season." />
+            <Link href="/shop?sort=featured" className="mb-1 text-[13px] font-semibold text-teak-dark hover:underline max-md:hidden">View all ↗</Link>
+          </div>
+          <Scroller className="mt-2">
+            {trending.map((p) => (
+              <Link key={p.id} href={`/product/${p.slug}`} data-cursor="view" className="group relative w-[68%] shrink-0 snap-start overflow-hidden rounded-2xl sm:w-[40%] md:w-[calc(20%-13px)]">
+                <img src={p.images[0]} alt="" className="aspect-[3/4] w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#E9B85E]">Trending</p>
+                  <p className="mt-1 font-serif text-xl font-semibold leading-tight">{p.name.replace(/^The Wooden Tone /, "")}</p>
+                  <p className="mt-1 text-xs text-white/85">{inr(p.price)}</p>
+                </div>
+              </Link>
+            ))}
+          </Scroller>
+        </section>
+      )}
+
+      {/* Category rows */}
+      <div className="container-site space-y-16 py-16 md:py-20">
+        {rows.filter((r) => r.items.length).map(({ sec, items }) => (
+          <section key={sec.title}>
+            <SectionHead eyebrow={sec.eyebrow} title={sec.title} href={`/shop?category=${sec.categories.join(",")}`} />
+            <div className="no-scrollbar -mx-4 mt-6 flex snap-x gap-3 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-5 md:gap-4 md:px-0">
+              {items.slice(0, 5).map((p) => (
+                <div key={p.id} className="w-[46%] shrink-0 snap-start sm:w-[31%] md:w-auto"><ProductCard p={p} /></div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
       {/* Categories */}
       <section className="container-site py-16 md:py-20">
         <SectionHead center eyebrow="Browse by category" title="Our Product Categories" sub={`${catCount}+ categories for every room — from beds and wardrobes to spice racks and pooja décor.`} />
@@ -56,6 +93,40 @@ export default async function Home() {
         </div>
         <div className="mt-8 text-center"><Link href="/categories" className="btn-outline">View all categories <ArrowRight className="h-4 w-4" /></Link></div>
       </section>
+
+      {/* Featured collection */}
+      {featured.length >= 2 && (
+        <section className="bg-cream">
+          <div className="container-site py-16 md:py-20">
+            <p className="eyebrow !text-muted">Featured</p>
+            <h2 className="h-display mt-2 text-[34px] md:text-[44px]">A small collection. A big impression.</h2>
+            <div className="mt-8 grid gap-4 md:grid-cols-[1.55fr_1fr]">
+              <FeatureTile p={featured[0]} big />
+              <div className="grid gap-4">
+                {featured.slice(1, 4).map((p) => <FeatureTile key={p.id} p={p} />)}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Promo banners */}
+      {promos.length > 0 && (
+        <section className="grid md:grid-cols-2">
+          {promos.map((b) => (
+            <Link key={b.id} data-cursor="view" href={b.ctaLink || "/shop"} className="group relative block h-[300px] overflow-hidden md:h-[420px]">
+              <img src={b.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/10" />
+              <div className="relative flex h-full flex-col justify-center p-8 text-white md:p-12">
+                {b.eyebrow && <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#E9B85E]">{b.eyebrow}</p>}
+                <h3 className="h-display mt-2 max-w-sm text-[34px] md:text-[42px]">{b.title}</h3>
+                {b.subtitle && <p className="mt-2 text-sm text-white/85">{b.subtitle}</p>}
+                {b.ctaLabel && <span className="mt-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em]">{b.ctaLabel} <ArrowRight className="h-4 w-4" /></span>}
+              </div>
+            </Link>
+          ))}
+        </section>
+      )}
 
       {/* Story */}
       <section className="bg-cream">
@@ -92,77 +163,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      {/* Trending */}
-      {trending.length > 0 && (
-        <section className="container-site py-16 md:py-20">
-          <div className="flex items-end justify-between">
-            <SectionHead eyebrow="Now trending" title="Pieces worth lingering on" sub="Our most-loved designs this season." />
-            <Link href="/shop?sort=featured" className="mb-1 text-[13px] font-semibold text-teak-dark hover:underline max-md:hidden">View all ↗</Link>
-          </div>
-          <Scroller className="mt-2">
-            {trending.map((p) => (
-              <Link key={p.id} href={`/product/${p.slug}`} data-cursor="view" className="group relative w-[68%] shrink-0 snap-start overflow-hidden rounded-2xl sm:w-[40%] md:w-[calc(20%-13px)]">
-                <img src={p.images[0]} alt="" className="aspect-[3/4] w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#E9B85E]">Trending</p>
-                  <p className="mt-1 font-serif text-xl font-semibold leading-tight">{p.name.replace(/^The Wooden Tone /, "")}</p>
-                  <p className="mt-1 text-xs text-white/85">{inr(p.price)}</p>
-                </div>
-              </Link>
-            ))}
-          </Scroller>
-        </section>
-      )}
-
-      {/* Promo banners */}
-      {promos.length > 0 && (
-        <section className="grid md:grid-cols-2">
-          {promos.map((b) => (
-            <Link key={b.id} data-cursor="view" href={b.ctaLink || "/shop"} className="group relative block h-[300px] overflow-hidden md:h-[420px]">
-              <img src={b.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/10" />
-              <div className="relative flex h-full flex-col justify-center p-8 text-white md:p-12">
-                {b.eyebrow && <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#E9B85E]">{b.eyebrow}</p>}
-                <h3 className="h-display mt-2 max-w-sm text-[34px] md:text-[42px]">{b.title}</h3>
-                {b.subtitle && <p className="mt-2 text-sm text-white/85">{b.subtitle}</p>}
-                {b.ctaLabel && <span className="mt-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em]">{b.ctaLabel} <ArrowRight className="h-4 w-4" /></span>}
-              </div>
-            </Link>
-          ))}
-        </section>
-      )}
-
-      {/* Category rows */}
-      <div className="container-site space-y-16 py-16 md:py-20">
-        {rows.filter((r) => r.items.length).map(({ sec, items }) => (
-          <section key={sec.title}>
-            <SectionHead eyebrow={sec.eyebrow} title={sec.title} href={`/shop?category=${sec.categories.join(",")}`} />
-            <div className="no-scrollbar -mx-4 mt-6 flex snap-x gap-3 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-5 md:gap-4 md:px-0">
-              {items.slice(0, 5).map((p) => (
-                <div key={p.id} className="w-[46%] shrink-0 snap-start sm:w-[31%] md:w-auto"><ProductCard p={p} /></div>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
-
-      {/* Featured collection */}
-      {featured.length >= 2 && (
-        <section className="bg-cream">
-          <div className="container-site py-16 md:py-20">
-            <p className="eyebrow !text-muted">Featured</p>
-            <h2 className="h-display mt-2 text-[34px] md:text-[44px]">A small collection. A big impression.</h2>
-            <div className="mt-8 grid gap-4 md:grid-cols-[1.55fr_1fr]">
-              <FeatureTile p={featured[0]} big />
-              <div className="grid gap-4">
-                {featured.slice(1, 4).map((p) => <FeatureTile key={p.id} p={p} />)}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Reviews */}
       {reviews.length > 0 && (
