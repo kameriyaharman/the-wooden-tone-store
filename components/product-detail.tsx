@@ -1,92 +1,19 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { BadgeCheck, FileText, Headphones, Heart, Lock, MessageSquareQuote, Play, RefreshCw, Ruler, Share2, ShoppingCart, Sparkles, Truck, X, Zap, ZoomIn } from "lucide-react";
+import { BadgeCheck, FileText, Headphones, Heart, Lock, MessageSquareQuote, RefreshCw, Ruler, Share2, ShoppingCart, Sparkles, Truck, Zap } from "lucide-react";
 import { useStore } from "./store-provider";
 import { QtyStepper } from "./cart-ui";
 import { Stars } from "./product-card";
 import { inr, pctOff } from "@/lib/format";
 import { navStart } from "./nav-progress";
-import { resolveVideo } from "@/lib/video";
+export { Gallery } from "./product-gallery";
 import type { Finish, SizeOpt } from "@/lib/db/schema";
 
 type P = {
   id: string; slug: string; name: string; price: number; mrp: number; images: string[]; stock: number; woodType: string | null;
   finishes: Finish[]; sizes: SizeOpt[]; shipsIn: string; ratingAvg: number; ratingCount: number;
 };
-
-export function Gallery({ images, video, name }: { images: string[]; video?: string | null; name: string }) {
-  const [i, setI] = useState(0);
-  const [zoom, setZoom] = useState(false);
-  const [tx, setTx] = useState<number | null>(null);
-  const imgs = images.length ? images : [""];
-  // Video sits right after the main photo so shoppers notice it.
-  const items: { kind: "img" | "video"; src: string }[] = imgs.map((src) => ({ kind: "img" as const, src }));
-  if (video) items.splice(1, 0, { kind: "video", src: video });
-  const cur = items[Math.min(i, items.length - 1)];
-  const vid = cur.kind === "video" ? resolveVideo(cur.src) : null;
-  const [vidErr, setVidErr] = useState(false);
-  return (
-    <div className="flex flex-col-reverse gap-3 md:flex-row">
-      <div className="no-scrollbar flex gap-2.5 overflow-x-auto md:w-[76px] md:flex-col">
-        {items.map((it, k) => (
-          <button key={k} onClick={() => setI(k)} className={`relative shrink-0 overflow-hidden rounded-xl border-2 ${k === i ? "border-teak" : "border-transparent"}`} aria-label={it.kind === "video" ? "Product video" : `Image ${k + 1}`}>
-            {it.kind === "video" ? (
-              <span className="grid h-[68px] w-[68px] place-items-center bg-walnut text-white md:h-[72px] md:w-[72px]">
-                {imgs[0] && <img src={imgs[0]} alt="" className="absolute inset-0 h-full w-full object-cover opacity-45" />}
-                <span className="relative flex flex-col items-center gap-0.5 text-[10px] font-bold uppercase tracking-wider"><span className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-ink"><Play className="ml-0.5 h-3.5 w-3.5 fill-current" /></span>Video</span>
-              </span>
-            ) : (
-              <img src={it.src} alt="" className="h-[68px] w-[68px] object-cover md:h-[72px] md:w-[72px]" />
-            )}
-          </button>
-        ))}
-      </div>
-      <div
-        className="relative flex-1 overflow-hidden rounded-2xl bg-cream"
-        onTouchStart={(e) => cur.kind === "img" && setTx(e.touches[0].clientX)}
-        onTouchEnd={(e) => {
-          if (tx === null) return;
-          const d = e.changedTouches[0].clientX - tx;
-          if (Math.abs(d) > 40) setI((x) => (x + (d < 0 ? 1 : -1) + items.length) % items.length);
-          setTx(null);
-        }}
-      >
-        {cur.kind === "video" ? (
-          <div className="grid aspect-square w-full place-items-center bg-black md:aspect-[4/4.2]">
-            {vid?.kind === "embed" ? (
-              <iframe key={vid.src} src={vid.provider === "youtube" ? `${vid.src}&autoplay=1&mute=1` : vid.src} title={`${name} video`} className="h-full w-full border-0"
-                allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen />
-            ) : vidErr ? (
-              <div className="px-6 text-center text-sm text-white/80">
-                <p>This video can&apos;t be played here.</p>
-                <a href={cur.src} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block rounded-full bg-white px-4 py-2 text-xs font-bold text-ink">Open video</a>
-              </div>
-            ) : (
-              <video key={vid?.src} src={vid?.src} controls autoPlay muted playsInline loop preload="metadata" poster={imgs[0] || undefined}
-                onError={() => setVidErr(true)} className="h-full w-full object-contain" />
-            )}
-          </div>
-        ) : (
-          <>
-            <img key={i} src={cur.src} alt={name} data-cursor="view" onClick={() => setZoom(true)} className="aspect-square w-full animate-[page-in_.4s_ease] object-cover md:aspect-[4/4.2]" />
-            <button onClick={() => setZoom(true)} className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white shadow" aria-label="Zoom image"><ZoomIn className="h-4 w-4" /></button>
-            {video && i === 0 && (
-              <button onClick={() => setI(1)} className="absolute bottom-4 right-4 flex items-center gap-1.5 rounded-full bg-white/95 px-3.5 py-2 text-xs font-bold shadow"><Play className="h-3.5 w-3.5 fill-current text-teak-dark" /> Watch video</button>
-            )}
-          </>
-        )}
-        {items.length > 1 && <span className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs text-white md:bottom-4 md:top-auto">{i + 1} / {items.length}</span>}
-      </div>
-      {zoom && cur.kind === "img" && (
-        <div className="fixed inset-0 z-[90] grid place-items-center bg-black/90 p-4" onClick={() => setZoom(false)}>
-          <img src={cur.src} alt={name} className="max-h-full max-w-full rounded-lg object-contain" />
-          <button className="absolute right-4 top-4 text-white" aria-label="Close"><X className="h-7 w-7" /></button>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export function BuyBox({ p, specLine }: { p: P; specLine: string }) {
   const router = useRouter();
