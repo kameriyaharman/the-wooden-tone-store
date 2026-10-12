@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, Expand, Play, X, ZoomIn, ZoomOut } from "lucide-react";
 import { resolveVideo } from "@/lib/video";
 
@@ -118,7 +119,7 @@ export function Gallery({ images, video, name }: { images: string[]; video?: str
         </div>
       )}
 
-      {viewer && <Viewer items={items} poster={poster} name={name} index={i} onIndex={(k) => go(k, false)} onClose={() => setViewer(false)} />}
+      {viewer && typeof document !== "undefined" && createPortal(<Viewer items={items} poster={poster} name={name} index={i} onIndex={(k) => go(k, false)} onClose={() => setViewer(false)} />, document.body)}
     </div>
   );
 }
@@ -218,7 +219,7 @@ function Viewer({ items, poster, name, index, onIndex, onClose }: { items: Item[
 
   const cur = items[index];
   return (
-    <div className="fixed inset-0 z-[95] flex flex-col bg-[#0f0b08] text-white" role="dialog" aria-modal="true" aria-label={`${name} photos`}>
+    <div className="fixed inset-0 z-[200] flex flex-col bg-[#0f0b08] text-white" role="dialog" aria-modal="true" aria-label={`${name} photos`}>
       <div className="flex items-center justify-between px-4 py-3">
         <span className="text-sm tabular-nums text-white/70">{index + 1} / {n}</span>
         <div className="flex items-center gap-2">
