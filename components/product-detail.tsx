@@ -7,7 +7,7 @@ import { QtyStepper } from "./cart-ui";
 import { Stars } from "./product-card";
 import { inr, pctOff } from "@/lib/format";
 import { navStart } from "./nav-progress";
-import { youtubeEmbed } from "@/lib/video";
+import { resolveVideo } from "@/lib/video";
 import type { Finish, SizeOpt } from "@/lib/db/schema";
 
 type P = {
@@ -24,7 +24,8 @@ export function Gallery({ images, video, name }: { images: string[]; video?: str
   const items: { kind: "img" | "video"; src: string }[] = imgs.map((src) => ({ kind: "img" as const, src }));
   if (video) items.splice(1, 0, { kind: "video", src: video });
   const cur = items[Math.min(i, items.length - 1)];
-  const yt = cur.kind === "video" ? youtubeEmbed(cur.src) : null;
+  const vid = cur.kind === "video" ? resolveVideo(cur.src) : null;
+  const [vidErr, setVidErr] = useState(false);
   return (
     <div className="flex flex-col-reverse gap-3 md:flex-row">
       <div className="no-scrollbar flex gap-2.5 overflow-x-auto md:w-[76px] md:flex-col">
@@ -53,8 +54,18 @@ export function Gallery({ images, video, name }: { images: string[]; video?: str
       >
         {cur.kind === "video" ? (
           <div className="grid aspect-square w-full place-items-center bg-black md:aspect-[4/4.2]">
-            {yt ? <iframe key={cur.src} src={`${yt}&autoplay=1&mute=1`} title={`${name} video`} className="h-full w-full" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
-              : <video key={cur.src} src={cur.src} controls autoPlay muted playsInline loop preload="metadata" poster={imgs[0] || undefined} className="h-full w-full object-contain" />}
+            {vid?.kind === "embed" ? (
+              <iframe key={vid.src} src={vid.provider === "youtube" ? `${vid.src}&autoplay=1&mute=1` : vid.src} title={`${name} video`} className="h-full w-full border-0"
+                allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen />
+            ) : vidErr ? (
+              <div className="px-6 text-center text-sm text-white/80">
+                <p>This video can&apos;t be played here.</p>
+                <a href={cur.src} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block rounded-full bg-white px-4 py-2 text-xs font-bold text-ink">Open video</a>
+              </div>
+            ) : (
+              <video key={vid?.src} src={vid?.src} controls autoPlay muted playsInline loop preload="metadata" poster={imgs[0] || undefined}
+                onError={() => setVidErr(true)} className="h-full w-full object-contain" />
+            )}
           </div>
         ) : (
           <>

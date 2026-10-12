@@ -2,7 +2,7 @@
 import { useFormStatus } from "react-dom";
 import { useRef, useState } from "react";
 import { ArrowDown, ArrowUp, ImagePlus, Loader2, Plus, Trash2, Video, X } from "lucide-react";
-import { youtubeEmbed } from "@/lib/video";
+import { resolveVideo } from "@/lib/video";
 
 export function Submit({ children, className = "btn-gold", confirm }: { children: React.ReactNode; className?: string; confirm?: string }) {
   const { pending } = useFormStatus();
@@ -83,7 +83,8 @@ export function VideoField({ name, initial = "" }: { name: string; initial?: str
   const [pct, setPct] = useState(0);
   const [err, setErr] = useState("");
   const ref = useRef<HTMLInputElement>(null);
-  const yt = youtubeEmbed(url);
+  const vid = resolveVideo(url);
+  const [bad, setBad] = useState(false);
   const upload = (f: File) => {
     if (f.size > 50 * 1024 * 1024) { setErr("Video is larger than 50 MB — please compress it first"); return; }
     setBusy(true); setErr(""); setPct(0);
@@ -104,12 +105,14 @@ export function VideoField({ name, initial = "" }: { name: string; initial?: str
       {url ? (
         <div className="max-w-sm">
           <div className="overflow-hidden rounded-xl border border-line bg-black">
-            {yt ? <iframe src={yt} className="aspect-video w-full" allow="encrypted-media; picture-in-picture" allowFullScreen title="Product video" />
-              : <video src={url} controls playsInline preload="metadata" className="aspect-video w-full" />}
+            {vid?.kind === "embed" ? <iframe src={vid.src} className="aspect-video w-full border-0" allow="encrypted-media; picture-in-picture; fullscreen" allowFullScreen title="Product video" />
+              : <video key={vid?.src} src={vid?.src} controls playsInline preload="metadata" onError={() => setBad(true)} onLoadedMetadata={() => setBad(false)} className="aspect-video w-full" />}
           </div>
+          {vid?.kind === "embed" && vid.provider === "drive" && <p className="mt-1 text-[11px] text-muted">Google Drive: file ko &quot;Anyone with the link&quot; par share karein, warna customers ko video nahi dikhega.</p>}
+          {bad && <p className="mt-1 text-xs text-sale">Yeh link video file nahi hai, isliye play nahi hoga. MP4 upload karein ya YouTube / Google Drive / Instagram link paste karein.</p>}
           <div className="mt-2 flex gap-3 text-xs font-semibold">
             <button type="button" onClick={() => ref.current?.click()} className="text-teak-dark">{busy ? `Uploading… ${pct}%` : "Replace"}</button>
-            <button type="button" onClick={() => setUrl("")} className="text-sale">Remove</button>
+            <button type="button" onClick={() => { setUrl(""); setBad(false); }} className="text-sale">Remove</button>
           </div>
         </div>
       ) : (
@@ -120,7 +123,7 @@ export function VideoField({ name, initial = "" }: { name: string; initial?: str
               : <span className="flex flex-col items-center gap-1"><Video className="h-5 w-5" />Upload video<span className="text-[10px]">MP4 · max 50 MB</span></span>}
           </button>
           <div className="min-w-[220px] flex-1">
-            <p className="text-xs text-muted">…or paste a YouTube / video link</p>
+            <p className="text-xs text-muted">…or paste a YouTube / Google Drive / Instagram / video link</p>
             <input className="input mt-1" placeholder="https://youtube.com/watch?v=…" onBlur={(e) => { const v = e.target.value.trim(); if (v) setUrl(v); }}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); (e.target as HTMLInputElement).blur(); } }} />
           </div>
