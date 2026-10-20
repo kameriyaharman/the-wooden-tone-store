@@ -23,13 +23,13 @@ export default async function Contact() {
           {cards.map(({ Icon, t, d, href }) => {
             const inner = (
               <>
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-tint text-teak-dark"><Icon className="h-4 w-4" /></span>
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-sm bg-tint text-teak-dark"><Icon className="h-4 w-4" /></span>
                 <span><b className="block text-[15px]">{t}</b><span className="text-[13px] text-muted">{d}</span></span>
               </>
             );
             return href ? <a key={t} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="card flex items-center gap-4 p-4 hover:border-teak">{inner}</a> : <div key={t} className="card flex items-center gap-4 p-4">{inner}</div>;
           })}
-          <div className="rounded-2xl border border-[#EADFCB] bg-cream p-5">
+          <div className="rounded-sm border border-[#EADFCB] bg-cream p-5">
             <p className="font-serif text-2xl font-semibold">Looking for a custom size?</p>
             <p className="mt-1 text-sm text-muted">Share your design and we&apos;ll craft it for you.</p>
             <Link href="/custom-order" className="btn-gold btn-sm mt-4">Start Custom Order <ArrowRight className="h-3.5 w-3.5" /></Link>
@@ -42,7 +42,7 @@ export default async function Contact() {
       </div>
       {st.mapEmbedUrl && (
         <div className="container-site pb-14">
-          <iframe src={st.mapEmbedUrl} className="h-80 w-full rounded-2xl border border-line" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Map" />
+          <iframe src={st.mapEmbedUrl} className="h-80 w-full rounded-sm border border-line" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Map" />
         </div>
       )}
     </>

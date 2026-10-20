@@ -48,7 +48,7 @@ export function Gallery({ images, video, name }: { images: string[]; video?: str
     return () => { el.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onResize); clearTimeout(t); };
   }, [i]);
 
-  if (!n) return <div className="aspect-square w-full rounded-2xl bg-cream" />;
+  if (!n) return <div className="aspect-square w-full rounded-sm bg-cream" />;
 
   return (
     <div className="relative flex w-full min-w-0 flex-col gap-3 md:block">
@@ -57,7 +57,7 @@ export function Gallery({ images, video, name }: { images: string[]; video?: str
       <div className="group relative">
         <div
           ref={track}
-          className="no-scrollbar flex aspect-square w-full snap-x snap-mandatory overflow-x-auto overscroll-x-contain rounded-2xl border border-line bg-white"
+          className="no-scrollbar flex aspect-square w-full snap-x snap-mandatory overflow-x-auto overscroll-x-contain rounded-sm border border-line bg-white"
           tabIndex={0}
           aria-roledescription="carousel"
           aria-label={`${name} photos`}
@@ -106,7 +106,7 @@ export function Gallery({ images, video, name }: { images: string[]; video?: str
               onClick={() => go(k)}
               aria-label={it.kind === "video" ? "Product video" : `Photo ${k + 1}`}
               aria-current={k === i}
-              className={`relative aspect-square w-[64px] shrink-0 overflow-hidden rounded-xl border-2 bg-white transition md:w-full ${k === i ? "border-teak" : "border-line opacity-70 hover:border-teak/50 hover:opacity-100"}`}
+              className={`relative aspect-square w-[64px] shrink-0 overflow-hidden rounded-sm border-2 bg-white transition md:w-full ${k === i ? "border-teak" : "border-line opacity-70 hover:border-teak/50 hover:opacity-100"}`}
             >
               <img src={it.kind === "video" ? poster : it.src} alt="" loading="lazy" className="h-full w-full object-contain p-0.5" />
               {it.kind === "video" && (
@@ -263,7 +263,7 @@ function Viewer({ items, poster, name, index, onIndex, onClose }: { items: Item[
             className={`h-full w-full select-none object-contain transition-transform duration-200 ${zoomed ? "cursor-zoom-out" : "cursor-zoom-in"} animate-[page-in_.25s_ease]`}
           />
         ) : (
-          <div className="aspect-video w-full max-w-4xl overflow-hidden rounded-lg"><VideoSlide src={cur.src} poster={poster} name={name} active /></div>
+          <div className="aspect-video w-full max-w-4xl overflow-hidden rounded-sm"><VideoSlide src={cur.src} poster={poster} name={name} active /></div>
         )}
         {n > 1 && (
           <>
@@ -277,7 +277,7 @@ function Viewer({ items, poster, name, index, onIndex, onClose }: { items: Item[
         <div ref={strip} className="no-scrollbar flex justify-start gap-2 overflow-x-auto px-4 py-3 md:justify-center">
           {items.map((it, k) => (
             <button key={k} onClick={() => { setZoomed(false); onIndex(k); }} aria-label={it.kind === "video" ? "Video" : `Photo ${k + 1}`}
-              className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 bg-white transition ${k === index ? "border-teak" : "border-transparent opacity-50 hover:opacity-90"}`}>
+              className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-sm border-2 bg-white transition ${k === index ? "border-teak" : "border-transparent opacity-50 hover:opacity-90"}`}>
               <img src={it.kind === "video" ? poster : it.src} alt="" className="h-full w-full object-contain" />
               {it.kind === "video" && <span className="absolute inset-0 grid place-items-center bg-black/45"><Play className="h-4 w-4 fill-white text-white" /></span>}
             </button>

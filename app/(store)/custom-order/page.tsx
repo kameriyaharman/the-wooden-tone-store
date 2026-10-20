@@ -9,12 +9,12 @@ export default async function CustomOrder() {
   const st = await getSettings();
   return (
     <>
-      <section className="relative overflow-hidden bg-[#1d1611] text-white">
+      <section className="relative overflow-hidden bg-[#231A13] text-white">
         <img src="/seed/products/desk.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-50 blur-[2px]" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/30" />
         <div className="container-site relative py-20 md:py-24">
           <div className="[&_*]:!text-white/80"><Breadcrumbs items={[{ href: "/", label: "Home" }, { label: "Custom Order" }]} /></div>
-          <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.24em] text-[#E9B85E]">Made to your size</p>
+          <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.24em] text-[#D9BC86]">Made to your size</p>
           <h1 className="h-display mt-3 max-w-xl text-[44px] md:text-[60px]">Get Your Design Crafted in Solid Wood</h1>
           <p className="mt-4 max-w-md text-white/85">Share a photo, sketch or reference — our craftsmen will build it in your size, wood and finish.</p>
         </div>
@@ -40,12 +40,12 @@ export default async function CustomOrder() {
               <ul className="mt-4 space-y-3 text-sm font-semibold">
                 {[[Ruler, "Perfect fit for your space"], [Leaf, "Choose wood & finish"], [Hammer, "Handcrafted by artisans"], [Truck, "Free delivery & assembly"]].map(([I, t]) => {
                   const Icon = I as typeof Ruler;
-                  return <li key={t as string} className="flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-lg bg-tint text-teak-dark"><Icon className="h-4 w-4" /></span>{t as string}</li>;
+                  return <li key={t as string} className="flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-sm bg-tint text-teak-dark"><Icon className="h-4 w-4" /></span>{t as string}</li>;
                 })}
               </ul>
             </div>
             <div className="card p-2">
-              <img src={st.customOrderImage} alt="" className="aspect-[4/3] w-full rounded-xl object-cover" />
+              <img src={st.customOrderImage} alt="" className="aspect-[4/3] w-full rounded-sm object-cover" />
               <p className="px-2 py-2 text-xs text-muted">Recent custom work — bed with matching side tables.</p>
             </div>
           </div>

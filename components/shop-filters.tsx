@@ -45,7 +45,7 @@ export function FilterPanel({ cats, woods, onApplied }: { cats: Cat[]; woods: st
   };
   const [showAll, setShowAll] = useState(false);
   const visibleCats = showAll ? cats : cats.filter((c) => c.n > 0 || selCats.includes(c.slug)).slice(0, 12);
-  const box = "h-4 w-4 rounded border-line accent-[#C4841D]";
+  const box = "h-4 w-4 rounded border-line accent-[#A8803E]";
   return (
     <div>
       <Group title="Price Range" icon={IndianRupee}>
@@ -53,7 +53,7 @@ export function FilterPanel({ cats, woods, onApplied }: { cats: Cat[]; woods: st
           <label className="text-[11px] text-muted">Min (₹)<input className="input mt-1 !py-2" inputMode="numeric" value={min} onChange={(e) => setMin(e.target.value.replace(/\D/g, ""))} /></label>
           <label className="text-[11px] text-muted">Max (₹)<input className="input mt-1 !py-2" inputMode="numeric" value={max} onChange={(e) => setMax(e.target.value.replace(/\D/g, ""))} /></label>
         </div>
-        <input type="range" min={0} max={200000} step={1000} value={Number(max) || 0} onChange={(e) => setMax(e.target.value)} className="mt-3 w-full accent-[#C4841D]" aria-label="Maximum price" />
+        <input type="range" min={0} max={200000} step={1000} value={Number(max) || 0} onChange={(e) => setMax(e.target.value)} className="mt-3 w-full accent-[#A8803E]" aria-label="Maximum price" />
         <button onClick={() => { set({ min: min === "0" ? null : min, max: max || null }); onApplied?.(); }} className="btn-outline btn-sm mt-2 w-full">Apply Price Filter</button>
       </Group>
       <Group title="Category" icon={LayoutGrid}>
@@ -81,7 +81,7 @@ export function FilterPanel({ cats, woods, onApplied }: { cats: Cat[]; woods: st
       <Group title="Discount" icon={Percent}>
         <ul className="space-y-2.5">
           {["50", "30", "10"].map((d) => (
-            <li key={d}><label className="flex cursor-pointer items-center gap-2.5 text-[13px]"><input type="radio" name="disc" className="h-4 w-4 accent-[#C4841D]" checked={sp.get("discount") === d} onChange={() => set({ discount: d })} />{d}% or more</label></li>
+            <li key={d}><label className="flex cursor-pointer items-center gap-2.5 text-[13px]"><input type="radio" name="disc" className="h-4 w-4 accent-[#A8803E]" checked={sp.get("discount") === d} onChange={() => set({ discount: d })} />{d}% or more</label></li>
           ))}
           {sp.get("discount") && <li><button className="text-xs text-teak-dark" onClick={() => set({ discount: null })}>Clear</button></li>}
         </ul>
@@ -91,7 +91,7 @@ export function FilterPanel({ cats, woods, onApplied }: { cats: Cat[]; woods: st
           {["4", "3", "2"].map((r) => (
             <li key={r}>
               <label className="flex cursor-pointer items-center gap-2.5 text-[13px]">
-                <input type="radio" name="rating" className="h-4 w-4 accent-[#C4841D]" checked={sp.get("rating") === r} onChange={() => set({ rating: r })} />
+                <input type="radio" name="rating" className="h-4 w-4 accent-[#A8803E]" checked={sp.get("rating") === r} onChange={() => set({ rating: r })} />
                 <span className="flex">{Array.from({ length: +r }).map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-teak text-teak" />)}</span> &amp; above
               </label>
             </li>
@@ -119,7 +119,7 @@ export function ViewToggle() {
   const { sp, set } = useQS();
   const list = sp.get("view") === "list";
   return (
-    <div className="flex overflow-hidden rounded-lg border border-line">
+    <div className="flex overflow-hidden rounded-sm border border-line">
       <button aria-label="Grid view" onClick={() => set({ view: null, page: sp.get("page") })} className={`grid h-9 w-9 place-items-center ${!list ? "bg-tint text-teak-dark" : ""}`}><LayoutGrid className="h-4 w-4" /></button>
       <button aria-label="List view" onClick={() => set({ view: "list", page: sp.get("page") })} className={`grid h-9 w-9 place-items-center ${list ? "bg-tint text-teak-dark" : ""}`}><List className="h-4 w-4" /></button>
     </div>

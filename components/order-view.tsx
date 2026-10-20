@@ -6,9 +6,9 @@ type Ev = { status: string; note: string | null; createdAt: Date };
 
 export function Timeline({ order, events }: { order: Order; events: Ev[] }) {
   if (order.status === "CANCELLED" || order.status === "RETURNED")
-    return <p className="rounded-xl bg-[#FDECEE] p-4 text-sm font-semibold text-sale">This order was {order.status === "CANCELLED" ? "cancelled" : "returned"}.</p>;
+    return <p className="rounded-sm bg-[#FDECEE] p-4 text-sm font-semibold text-sale">This order was {order.status === "CANCELLED" ? "cancelled" : "returned"}.</p>;
   if (order.status === "PENDING_PAYMENT")
-    return <p className="flex items-center gap-2 rounded-xl bg-tint p-4 text-sm font-semibold text-teak-dark"><Clock className="h-4 w-4" /> Awaiting payment</p>;
+    return <p className="flex items-center gap-2 rounded-sm bg-tint p-4 text-sm font-semibold text-teak-dark"><Clock className="h-4 w-4" /> Awaiting payment</p>;
   const curIdx = TIMELINE.indexOf(order.status as (typeof TIMELINE)[number]);
   const at = (st: string) => events.find((e) => e.status === st);
   return (
@@ -43,7 +43,7 @@ export function OrderItems({ items }: { items: OrderItem[] }) {
     <ul className="space-y-3">
       {items.map((it) => (
         <li key={it.id} className="flex items-center gap-3">
-          {it.image && <img src={it.image} alt="" className="h-14 w-14 rounded-lg object-cover" />}
+          {it.image && <img src={it.image} alt="" className="h-14 w-14 rounded-sm object-cover" />}
           <div className="min-w-0 flex-1">
             <p className="line-clamp-2 text-[13px] font-medium">{it.name.replace(/^The Wooden Tone /, "")}</p>
             <p className="text-[11px] text-muted">Qty {it.qty}{it.size ? ` · ${it.size}` : ""}{it.finish ? ` · ${it.finish}` : ""}</p>

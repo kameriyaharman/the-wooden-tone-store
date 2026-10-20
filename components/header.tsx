@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ChevronRight, Heart, LayoutGrid, Menu, Search, ShoppingCart, Truck, User, X, ArrowRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Heart, Menu, Search, ShoppingBag, Truck, User, X, ArrowRight } from "lucide-react";
 import { useStore } from "./store-provider";
 import { WhatsappIcon } from "./icons";
 import type { NavRoom } from "@/lib/catalog";
@@ -11,24 +11,49 @@ import { inr } from "@/lib/format";
 type Props = { rooms: NavRoom[]; storeName: string; tagline: string; whatsapp: string; loggedIn: boolean };
 
 const NAV = [
-  { href: "/", label: "Home" },
-  { href: "/shop", label: "Shop" },
+  { href: "/shop?sort=new", label: "New In" },
+  { href: "/shop?sort=featured", label: "Best Sellers" },
+  { href: "/shop?sort=discount", label: "Offers" },
   { href: "/custom-order", label: "Custom Order" },
-  { href: "/about", label: "About" },
+  { href: "/about", label: "Our Story" },
   { href: "/contact", label: "Contact" },
 ];
 
 export function Logo({ compact = false, storeName, tagline }: { compact?: boolean; storeName: string; tagline: string }) {
   return (
-    <Link href="/" className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-teak/40" aria-label={storeName}>
-      <img src="/seed/logo.png" alt="" className={compact ? "h-9 w-auto" : "h-11 w-auto"} />
-      {!compact && (
-        <span className="hidden whitespace-nowrap leading-none sm:block">
-          <span className="block font-serif text-[19px] font-bold tracking-tight text-ink">{storeName}</span>
-          <span className="mt-1 block text-[9px] font-semibold uppercase tracking-[0.3em] text-muted">{tagline}</span>
+    <Link href="/" className="flex flex-col items-center rounded-md text-center outline-none focus-visible:ring-2 focus-visible:ring-teak/40" aria-label={storeName}>
+      {compact ? (
+        <span className="flex items-center gap-2">
+          <img src="/seed/logo.png" alt="" className="h-7 w-auto shrink-0" />
+          <span className="whitespace-nowrap font-serif text-[15px] font-semibold uppercase tracking-[0.1em] text-ink min-[400px]:text-[17px]">{storeName}</span>
         </span>
+      ) : (
+        <>
+          <img src="/seed/logo.png" alt="" className="h-10 w-auto transition-all duration-300 group-data-[scrolled]/hdr:h-8" />
+          <span className="mt-1 whitespace-nowrap font-serif text-[24px] font-semibold uppercase leading-none tracking-[0.2em] text-ink transition-all duration-300 group-data-[scrolled]/hdr:text-[20px]">{storeName}</span>
+          <span className="mt-1.5 whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.42em] text-teak transition-all duration-300 group-data-[scrolled]/hdr:hidden">{tagline}</span>
+        </>
       )}
     </Link>
+  );
+}
+
+/** Rotating one-line announcement strip (Gharana-style top bar). */
+export function AnnouncementBar({ items }: { items: string[] }) {
+  const [i, setI] = useState(0);
+  const n = items.length;
+  useEffect(() => {
+    if (n < 2) return;
+    const t = setInterval(() => setI((x) => (x + 1) % n), 3500);
+    return () => clearInterval(t);
+  }, [n]);
+  if (!n) return null;
+  return (
+    <div className="bg-ink text-white">
+      <div className="container-site flex h-9 items-center justify-center">
+        <p key={i} className="animate-ann-in truncate text-center text-[11px] font-medium uppercase tracking-[0.22em]">{items[i]}</p>
+      </div>
+    </div>
   );
 }
 
@@ -60,19 +85,19 @@ function SearchBox({ onDone, autoFocus }: { onDone?: () => void; autoFocus?: boo
         router.push(`/shop?q=${encodeURIComponent(q.trim())}`);
       }}
     >
-      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+      <Search className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
       <input
         autoFocus={autoFocus}
         value={q}
         onChange={(e) => { setQ(e.target.value); setOpen(true); }}
         onFocus={() => setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
-        placeholder="Search furniture, decor…"
-        className="w-full rounded-lg border border-[#EADFCB] bg-cream py-2.5 pl-9 pr-3 text-sm outline-none focus:border-teak"
+        placeholder="Search furniture, décor…"
+        className="w-full border-b border-line bg-transparent py-2 pl-7 pr-2 text-[13px] tracking-wide outline-none transition placeholder:text-muted focus:border-teak"
         aria-label="Search products"
       />
       {open && res.length > 0 && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-line bg-white shadow-card">
+        <div className="absolute left-0 right-0 top-full z-50 mt-2 min-w-[300px] overflow-hidden border border-line bg-white shadow-card">
           {res.map((p) => (
             <Link key={p.slug} href={`/product/${p.slug}`} onClick={() => onDone?.()} className="flex items-center gap-3 px-3 py-2 hover:bg-cream">
               {p.image && <img src={p.image} alt="" className="h-10 w-10 rounded-md object-cover" />}
@@ -92,7 +117,7 @@ function MegaMenu({ rooms, onClose }: { rooms: NavRoom[]; onClose: () => void })
   const room = rooms[active];
   if (!room) return null;
   return (
-    <div className="absolute left-1/2 top-full z-50 mt-2 w-[min(1100px,calc(100vw-32px))] -translate-x-1/2 rounded-2xl border border-line bg-white p-5 shadow-2xl">
+    <div className="absolute left-1/2 top-full z-50 w-[min(1100px,calc(100vw-32px))] -translate-x-1/2 border border-line bg-white p-6 shadow-2xl">
       <div className="grid grid-cols-[200px_1fr_240px] gap-6">
         <div>
           <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-muted">Shop by room</p>
@@ -103,7 +128,7 @@ function MegaMenu({ rooms, onClose }: { rooms: NavRoom[]; onClose: () => void })
                   href={`/shop?room=${r.slug}`}
                   onMouseEnter={() => setActive(i)}
                   onClick={onClose}
-                  className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${i === active ? "bg-ink text-white" : "text-ink hover:bg-cream"}`}
+                  className={`flex items-center justify-between px-3 py-2 text-[13px] uppercase tracking-[0.1em] ${i === active ? "bg-ink text-white" : "text-ink hover:bg-cream"}`}
                 >
                   {r.name} <ChevronRight className="h-3.5 w-3.5" />
                 </Link>
@@ -127,16 +152,16 @@ function MegaMenu({ rooms, onClose }: { rooms: NavRoom[]; onClose: () => void })
             <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-line pt-4 text-xs text-muted">
               Trending in {room.name}
               {room.categories.slice(0, 4).map((c) => (
-                <Link key={c.slug} href={`/shop?category=${c.slug}`} onClick={onClose} className="rounded-full bg-cream px-3 py-1 text-ink hover:bg-tint">
+                <Link key={c.slug} href={`/shop?category=${c.slug}`} onClick={onClose} className="border border-line px-3 py-1 text-ink hover:border-teak hover:text-teak-dark">
                   {c.name}
                 </Link>
               ))}
             </div>
           )}
         </div>
-        <div className="rounded-xl bg-cream p-3">
-          <img src={room.image || room.categories[0]?.image || "/seed/banners/hero-sofa.jpg"} alt="" className="h-36 w-full rounded-lg object-cover" />
-          <p className="mt-3 font-serif text-xl font-semibold">{room.name} Edit</p>
+        <div className="bg-cream p-3">
+          <img src={room.image || room.categories[0]?.image || "/seed/banners/hero-sofa.jpg"} alt="" className="h-40 w-full object-cover" />
+          <p className="mt-3 font-serif text-2xl font-medium">{room.name} Edit</p>
           <p className="mt-1 text-xs text-muted">{room.description}</p>
           <Link href={`/shop?room=${room.slug}`} onClick={onClose} className="btn-outline btn-sm mt-3">
             Shop section <ArrowRight className="h-3.5 w-3.5" />
@@ -156,7 +181,7 @@ function MobileMenu({ rooms, onClose, whatsapp, storeName, tagline }: { rooms: N
         <div className="flex items-center justify-between border-b border-line px-4 py-3">
           <div className="flex items-center gap-2">
             <img src="/seed/logo.png" alt="" className="h-9" />
-            <span className="font-serif text-lg font-semibold">{storeName}</span>
+            <span className="font-serif text-lg font-semibold uppercase tracking-[0.12em]">{storeName}</span>
           </div>
           <button onClick={onClose} aria-label="Close menu" className="p-1"><X className="h-5 w-5" /></button>
         </div>
@@ -165,19 +190,19 @@ function MobileMenu({ rooms, onClose, whatsapp, storeName, tagline }: { rooms: N
         <div className="grid grid-cols-3 gap-2.5 p-4">
           {popular.map((c) => (
             <Link key={c.slug} href={`/shop?category=${c.slug}`} onClick={onClose} className="text-center">
-              <img src={c.image!} alt="" className="aspect-square w-full rounded-xl object-cover" />
+              <img src={c.image!} alt="" className="arch aspect-[4/5] w-full object-cover" />
               <span className="mt-1 block text-xs">{c.name}</span>
             </Link>
           ))}
         </div>
         <nav className="border-t border-line">
           {[{ href: "/", label: "Home" }, { href: "/categories", label: "Shop by Category" }, { href: "/shop", label: "Shop All" }, { href: "/custom-order", label: "Custom Order" }, { href: "/about", label: "About Us" }, { href: "/contact", label: "Contact" }, { href: "/track-order", label: "Track Order" }, { href: "/wishlist", label: "Wishlist" }, { href: "/account", label: "My Account" }].map((l) => (
-            <Link key={l.href} href={l.href} onClick={onClose} className="flex items-center justify-between border-b border-line px-4 py-3.5 text-[15px] font-medium">
+            <Link key={l.href} href={l.href} onClick={onClose} className="flex items-center justify-between border-b border-line px-4 py-3.5 text-[13px] font-medium uppercase tracking-[0.14em]">
               {l.label} <ChevronRight className="h-4 w-4 text-muted" />
             </Link>
           ))}
         </nav>
-        <div className="m-4 rounded-xl bg-cream p-4">
+        <div className="m-4 bg-cream p-4">
           <p className="text-sm font-semibold">Need help choosing?</p>
           <p className="mt-1 text-xs text-muted">Chat with us on WhatsApp for sizes, finishes and custom work.</p>
           <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer" className="btn-gold btn-sm mt-3"><WhatsappIcon className="h-4 w-4" /> Chat on WhatsApp</a>
@@ -194,56 +219,74 @@ export function Header({ rooms, storeName, tagline, whatsapp, loggedIn }: Props)
   const [mega, setMega] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [mSearch, setMSearch] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const closeT = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => { setMega(false); setMobile(false); setMSearch(false); }, [pathname]);
   useEffect(() => {
     document.body.style.overflow = mobile ? "hidden" : "";
   }, [mobile]);
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 40);
+    on();
+    window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
+  }, []);
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
-  const pill = (on: boolean) => `nav-link whitespace-nowrap rounded-md px-3 py-1.5 text-[14px] transition ${on ? "bg-tint text-teak-dark" : "text-ink hover:text-teak-dark"}`;
+  const link = (on: boolean) =>
+    `nav-link whitespace-nowrap px-3 py-1.5 text-[12px] font-medium uppercase tracking-[0.16em] transition ${on ? "text-teak-dark" : "text-ink hover:text-teak-dark"}`;
+  const icon = "relative p-2 transition hover:text-teak-dark";
+  const badge = "badge-pop absolute right-0 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-teak px-1 text-[9px] font-semibold text-white";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-white">
-      <div className="container-site flex h-[68px] items-center gap-4 lg:h-[76px]">
-        <button className="-ml-1 p-1 lg:hidden" onClick={() => setMobile(true)} aria-label="Open menu"><Menu className="h-6 w-6" /></button>
+    <header data-scrolled={scrolled || undefined} className="group/hdr sticky top-0 z-50 border-b border-line bg-ivory/95 backdrop-blur supports-[backdrop-filter]:bg-ivory/90">
+      <div className={`container-site grid grid-cols-[1fr_auto_1fr] items-center gap-3 transition-all duration-300 ${scrolled ? "h-[60px] lg:h-[70px]" : "h-[64px] lg:h-[96px]"}`}>
+        {/* left */}
+        <div className="flex items-center">
+          <button className="-ml-1 p-1 lg:hidden" onClick={() => setMobile(true)} aria-label="Open menu"><Menu className="h-6 w-6" /></button>
+          <div className="hidden w-60 lg:block"><SearchBox /></div>
+        </div>
+
+        {/* centre logo */}
         <div className="lg:hidden"><Logo compact storeName={storeName} tagline={tagline} /></div>
         <div className="hidden lg:block"><Logo storeName={storeName} tagline={tagline} /></div>
 
-        <nav className="relative ml-6 hidden items-center gap-0.5 lg:flex">
-          <Link href="/" className={pill(isActive("/") && pathname === "/")}>Home</Link>
-          <div
-            onMouseEnter={() => { if (closeT.current) clearTimeout(closeT.current); setMega(true); }}
-            onMouseLeave={() => { closeT.current = setTimeout(() => setMega(false), 150); }}
-            className="static"
-          >
-            <button onClick={() => setMega((v) => !v)} className={`${pill(mega || pathname.startsWith("/categories"))} flex items-center gap-1.5`} aria-expanded={mega}>
-              <LayoutGrid className="h-4 w-4" /> Categories <ChevronDown className="h-3.5 w-3.5" />
-            </button>
-            {mega && <MegaMenu rooms={rooms} onClose={() => setMega(false)} />}
-          </div>
-          {NAV.slice(1).map((n) => (
-            <Link key={n.href} href={n.href} className={pill(isActive(n.href))}>{n.label}</Link>
-          ))}
-        </nav>
-
-        <div className="ml-auto hidden w-52 xl:block"><SearchBox /></div>
-        <div className="ml-auto flex items-center gap-1 xl:ml-2">
-          <button className="p-2 xl:hidden" aria-label="Search" onClick={() => setMSearch((v) => !v)}><Search className="h-5 w-5" /></button>
-          <Link href="/track-order" className="hidden p-2 hover:text-teak-dark lg:block" aria-label="Track order" title="Track order"><Truck className="h-5 w-5" /></Link>
-          <Link href="/wishlist" className="relative hidden p-2 hover:text-teak-dark lg:block" aria-label="Wishlist">
-            <Heart className="h-5 w-5" />
-            {ready && wishlist.length > 0 && <span key={wishlist.length} className="badge-pop absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-teak px-1 text-[10px] font-bold text-white">{wishlist.length}</span>}
+        {/* right */}
+        <div className="flex items-center justify-end gap-0.5">
+          <button className={`${icon} lg:hidden`} aria-label="Search" onClick={() => setMSearch((v) => !v)}><Search className="h-5 w-5" strokeWidth={1.5} /></button>
+          <Link href="/track-order" className={`${icon} hidden lg:block`} aria-label="Track order" title="Track order"><Truck className="h-5 w-5" strokeWidth={1.5} /></Link>
+          <Link href={loggedIn ? "/account" : "/login"} className={`${icon} hidden lg:block`} aria-label="Account" title={loggedIn ? "My account" : "Sign in"}><User className="h-5 w-5" strokeWidth={1.5} /></Link>
+          <Link href="/wishlist" className={`${icon} hidden lg:block`} aria-label="Wishlist" title="Wishlist">
+            <Heart className="h-5 w-5" strokeWidth={1.5} />
+            {ready && wishlist.length > 0 && <span key={wishlist.length} className={badge}>{wishlist.length}</span>}
           </Link>
-          <button onClick={() => setDrawer(true)} className="relative p-2 hover:text-teak-dark" aria-label={`Cart, ${count} items`}>
-            <ShoppingCart className="h-5 w-5" />
-            {ready && count > 0 && <span key={count} className="badge-pop absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-teak px-1 text-[10px] font-bold text-white">{count}</span>}
+          <button onClick={() => setDrawer(true)} className={icon} aria-label={`Cart, ${count} items`} title="Cart">
+            <ShoppingBag className="h-5 w-5" strokeWidth={1.5} />
+            {ready && count > 0 && <span key={count} className={badge}>{count}</span>}
           </button>
-          <Link href={loggedIn ? "/account" : "/login"} className="hidden p-2 hover:text-teak-dark lg:block" aria-label="Account"><User className="h-5 w-5" /></Link>
         </div>
       </div>
-      {mSearch && <div className="container-site pb-3 xl:hidden"><SearchBox autoFocus onDone={() => setMSearch(false)} /></div>}
+
+      {/* centred nav row */}
+      <nav className="relative hidden h-12 items-center justify-center gap-1 border-t border-line lg:flex">
+        <Link href="/" className={link(isActive("/"))}>Home</Link>
+        <div
+          onMouseEnter={() => { if (closeT.current) clearTimeout(closeT.current); setMega(true); }}
+          onMouseLeave={() => { closeT.current = setTimeout(() => setMega(false), 150); }}
+          className="static flex h-full items-center"
+        >
+          <button onClick={() => setMega((v) => !v)} className={`${link(mega || pathname.startsWith("/categories") || pathname.startsWith("/shop"))} flex items-center gap-1`} aria-expanded={mega}>
+            Shop <ChevronDown className="h-3 w-3" />
+          </button>
+          {mega && <MegaMenu rooms={rooms} onClose={() => setMega(false)} />}
+        </div>
+        {NAV.map((n) => (
+          <Link key={n.href} href={n.href} className={link(n.href.startsWith("/shop") ? false : isActive(n.href))}>{n.label}</Link>
+        ))}
+      </nav>
+
+      {mSearch && <div className="container-site pb-3 lg:hidden"><SearchBox autoFocus onDone={() => setMSearch(false)} /></div>}
       {mobile && <MobileMenu rooms={rooms} onClose={() => setMobile(false)} whatsapp={whatsapp} storeName={storeName} tagline={tagline} />}
     </header>
   );

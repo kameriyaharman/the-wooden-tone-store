@@ -53,7 +53,7 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
           </div>
           <div className="mt-5"><Timeline order={o} events={o.events} /></div>
           {o.trackingNo && (
-            <p className="mt-4 rounded-lg bg-cream p-3 text-sm">
+            <p className="mt-4 rounded-sm bg-cream p-3 text-sm">
               Tracking: <b>{o.courier}</b> · {o.trackingNo}
               {o.trackingUrl && <> · <a href={o.trackingUrl} target="_blank" rel="noreferrer" className="link-gold">Track shipment</a></>}
             </p>
@@ -64,7 +64,7 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
             <OrderItems items={o.items} />
             <div className="mt-4 border-t border-line pt-4"><OrderTotals o={o} /></div>
           </div>
-          <div className="rounded-2xl border border-[#EADFCB] bg-tint p-4 text-sm">
+          <div className="rounded-sm border border-[#EADFCB] bg-tint p-4 text-sm">
             <p className="font-semibold text-teak-dark">Delivery address</p>
             <p className="mt-1 text-teak-dark/90">{o.firstName} {o.lastName} · {o.phone}<br />{o.line1}{o.landmark ? `, ${o.landmark}` : ""}<br />{o.city}, {o.state} {o.pincode}</p>
           </div>

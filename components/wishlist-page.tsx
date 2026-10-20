@@ -22,7 +22,7 @@ export function WishlistPage() {
       {wishlist.map((w) => (
         <div key={w.productId} className="card flex flex-col p-2">
           <div className="relative">
-            <Link href={`/product/${w.slug}`}>{w.image && <img src={w.image} alt="" className="aspect-square w-full rounded-xl object-cover" />}</Link>
+            <Link href={`/product/${w.slug}`}>{w.image && <img src={w.image} alt="" className="aspect-square w-full rounded-sm object-cover" />}</Link>
             <SaleBadge price={w.price} mrp={w.mrp} className="absolute left-2 top-2" />
             <button onClick={() => toggleWish(w)} className="absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-full bg-white shadow" aria-label="Remove"><Trash2 className="h-4 w-4 text-sale" /></button>
           </div>

@@ -56,12 +56,12 @@ export default async function Shop({ searchParams }: { searchParams: Promise<Sho
           ) : q.view === "list" ? (
             <div className="mt-5 grid gap-4">{res.items.map((p) => <ProductCard key={p.id} p={p} list />)}</div>
           ) : (
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 xl:grid-cols-4">{res.items.map((p) => <ProductCard key={p.id} p={p} />)}</div>
+            <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 md:gap-x-5 md:gap-y-10 xl:grid-cols-4">{res.items.map((p) => <ProductCard key={p.id} p={p} />)}</div>
           )}
           {res.pages > 1 && (
             <nav className="mt-10 flex justify-center gap-2" aria-label="Pagination">
               <PageLink href={href(res.page - 1)} disabled={res.page <= 1}><ChevronLeft className="h-4 w-4" /></PageLink>
-              {pages.map((p, i) => p === "…" ? <span key={i} className="grid h-10 w-10 place-items-center rounded-lg border border-line text-muted">…</span> : <PageLink key={i} href={href(p)} active={p === res.page}>{p}</PageLink>)}
+              {pages.map((p, i) => p === "…" ? <span key={i} className="grid h-10 w-10 place-items-center border border-line text-muted">…</span> : <PageLink key={i} href={href(p)} active={p === res.page}>{p}</PageLink>)}
               <PageLink href={href(res.page + 1)} disabled={res.page >= res.pages}><ChevronRight className="h-4 w-4" /></PageLink>
             </nav>
           )}
@@ -81,6 +81,6 @@ function pageList(cur: number, total: number): (number | "…")[] {
 }
 
 function PageLink({ href, children, active, disabled }: { href: string; children: React.ReactNode; active?: boolean; disabled?: boolean }) {
-  const cls = `grid h-10 min-w-10 place-items-center rounded-lg border px-2 text-sm ${active ? "border-ink bg-ink text-white" : "border-line hover:border-teak"} ${disabled ? "pointer-events-none opacity-40" : ""}`;
+  const cls = `grid h-10 min-w-10 place-items-center border px-2 text-sm ${active ? "border-ink bg-ink text-white" : "border-line hover:border-teak"} ${disabled ? "pointer-events-none opacity-40" : ""}`;
   return <Link href={href} className={cls} aria-current={active ? "page" : undefined}>{children}</Link>;
 }

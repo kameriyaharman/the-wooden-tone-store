@@ -13,7 +13,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
         <img src="/seed/banners/hero-sofa.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-black/10" />
         <div className="absolute bottom-0 p-12 text-white">
-          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#E9B85E]">Welcome to The Wooden Tone</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#D9BC86]">Welcome to The Wooden Tone</p>
           <p className="h-display mt-3 text-5xl">Your home, crafted in wood.</p>
           <p className="mt-3 text-white/85">Save your wishlist, track orders and check out faster.</p>
         </div>

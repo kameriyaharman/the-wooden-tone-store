@@ -20,7 +20,7 @@ export default async function Categories() {
       <div className="container-site py-10 md:py-14">
         <div className="grid gap-4 md:grid-cols-3">
           {rooms.map((r) => (
-            <Link key={r.slug} href={`/shop?room=${r.slug}`} className="group relative block h-44 overflow-hidden rounded-2xl md:h-56">
+            <Link key={r.slug} href={`/shop?room=${r.slug}`} className="group relative block h-44 overflow-hidden rounded-sm md:h-56">
               {r.image && <img src={r.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />}
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
               <div className="absolute bottom-0 p-5 text-white">

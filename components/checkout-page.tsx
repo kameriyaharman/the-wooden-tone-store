@@ -35,7 +35,7 @@ export async function openRazorpay(rz: RzpData, orderNo: string, onDone: (ok: bo
   if (!ok || !window.Razorpay) return onDone(false);
   const r = new window.Razorpay({
     key: rz.key, order_id: rz.orderId, amount: rz.amount, currency: "INR", name: rz.name, description: `Order ${orderNo}`,
-    image: `${window.location.origin}/seed/logo-square.png`, prefill: rz.prefill, theme: { color: "#C4841D" },
+    image: `${window.location.origin}/seed/logo-square.png`, prefill: rz.prefill, theme: { color: "#A8803E" },
     handler: async (resp: Record<string, string>) => {
       const v = await fetch("/api/payment/razorpay/verify", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ orderNo, ...resp }) }).then((x) => x.json()).catch(() => ({ ok: false }));
       onDone(!!v.ok);
@@ -158,7 +158,7 @@ export function CheckoutPage({ methods, loggedIn, user, savedAddr }: { methods: 
       <ul className="mt-4 space-y-3">
         {items.map((it) => (
           <li key={it.key} className="flex items-center gap-3">
-            {it.image && <img src={it.image} alt="" className="h-14 w-14 rounded-lg object-cover" />}
+            {it.image && <img src={it.image} alt="" className="h-14 w-14 rounded-sm object-cover" />}
             <div className="min-w-0 flex-1">
               <p className="line-clamp-2 text-[13px] font-medium">{it.name.replace(/^The Wooden Tone /, "")}</p>
               <p className="text-[11px] text-muted">Qty {it.qty}{it.size ? ` · ${it.size}` : ""}{it.finish ? ` · ${it.finish}` : ""}</p>
@@ -174,8 +174,8 @@ export function CheckoutPage({ methods, loggedIn, user, savedAddr }: { methods: 
         {q?.ok && q.codFee > 0 && <div className="flex justify-between"><dt className="text-muted">COD fee</dt><dd>{inr(q.codFee)}</dd></div>}
         <div className="flex justify-between border-t border-line pt-3 text-lg font-bold"><dt>Order total</dt><dd>{inr(total)}</dd></div>
       </dl>
-      {q && !q.ok && <p className="mt-3 rounded-lg bg-[#FDECEE] p-3 text-sm text-sale">{q.error}</p>}
-      {err && <p className="mt-3 rounded-lg bg-[#FDECEE] p-3 text-sm text-sale" role="alert">{err}</p>}
+      {q && !q.ok && <p className="mt-3 rounded-sm bg-[#FDECEE] p-3 text-sm text-sale">{q.error}</p>}
+      {err && <p className="mt-3 rounded-sm bg-[#FDECEE] p-3 text-sm text-sale" role="alert">{err}</p>}
       <button onClick={place} disabled={busy || (q !== null && !q.ok)} className="btn-gold mt-5 w-full !py-3.5">
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
         {method === "COD" ? "Place Order" : "Pay"} · {inr(total)}
@@ -193,7 +193,7 @@ export function CheckoutPage({ methods, loggedIn, user, savedAddr }: { methods: 
           <div className="card p-5 md:p-6">
             <h1 className="flex items-center gap-3 font-serif text-3xl font-semibold"><span className="icon-chip"><MapPin className="h-4 w-4" /></span>Delivery Address</h1>
             {!loggedIn && (
-              <div className="mt-4 rounded-xl border border-[#EADFCB] bg-tint p-3.5 text-[13px]">
+              <div className="mt-4 rounded-sm border border-[#EADFCB] bg-tint p-3.5 text-[13px]">
                 <p className="font-semibold text-teak-dark">Guest Checkout</p>
                 <p className="text-teak-dark/80">You can checkout as a guest or <Link href="/login?next=/checkout" className="underline">login</Link> to save your details.</p>
               </div>
@@ -225,8 +225,8 @@ export function CheckoutPage({ methods, loggedIn, user, savedAddr }: { methods: 
             <h2 className="flex items-center gap-3 font-serif text-3xl font-semibold"><span className="icon-chip"><CreditCard className="h-4 w-4" /></span>Payment Method</h2>
             <div className="mt-4 space-y-3">
               {opts.map((o) => (
-                <label key={o.v} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition ${method === o.v ? "border-teak bg-[#FFFBF3]" : "border-line"} ${o.disabled ? "cursor-not-allowed opacity-50" : ""}`}>
-                  <input type="radio" name="pm" className="h-4 w-4 accent-[#C4841D]" checked={method === o.v} disabled={o.disabled} onChange={() => setMethod(o.v)} />
+                <label key={o.v} className={`flex cursor-pointer items-center gap-3 rounded-sm border p-4 transition ${method === o.v ? "border-teak bg-[#FFFBF3]" : "border-line"} ${o.disabled ? "cursor-not-allowed opacity-50" : ""}`}>
+                  <input type="radio" name="pm" className="h-4 w-4 accent-[#A8803E]" checked={method === o.v} disabled={o.disabled} onChange={() => setMethod(o.v)} />
                   <o.Icon className="h-5 w-5 text-ink" />
                   <span><span className="block text-sm font-semibold">{o.t}</span><span className="text-xs text-muted">{o.d}</span></span>
                 </label>

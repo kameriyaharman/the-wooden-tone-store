@@ -60,7 +60,7 @@ export function BuyBox({ p, specLine }: { p: P; specLine: string }) {
         {specLine && <span>{specLine}</span>}
         <span className="inline-flex items-center gap-1 rounded-full bg-[#E8F5EE] px-2.5 py-1 text-xs font-semibold text-stock"><BadgeCheck className="h-3.5 w-3.5" /> Authentic product</span>
       </div>
-      <div className="mt-5 rounded-xl border border-[#EADFCB] bg-gradient-to-b from-[#FFFDF9] to-cream p-5">
+      <div className="mt-5 rounded-sm border border-[#EADFCB] bg-gradient-to-b from-[#FFFDF9] to-cream p-5">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted">Your price</p>
         <div className="mt-1 flex flex-wrap items-baseline gap-3">
           <span className="text-[34px] font-extrabold tracking-tight">{inr(price)}</span>
@@ -104,7 +104,7 @@ export function BuyBox({ p, specLine }: { p: P; specLine: string }) {
       </div>
       <div className="mt-5 hidden md:block">{actions()}</div>
       <div className="mt-5 md:hidden">{actions(true)}</div>
-      <div className="mt-5 grid grid-cols-2 overflow-hidden rounded-xl border border-line sm:grid-cols-4">
+      <div className="mt-5 grid grid-cols-2 overflow-hidden rounded-sm border border-line sm:grid-cols-4">
         {[[Truck, "Free Delivery", "Across India"], [Lock, "Secure Checkout", "Encrypted"], [RefreshCw, "Easy Returns", "Money return"], [Headphones, "24/7 Support", "Call / WhatsApp"]].map(([I, t, d], k) => {
           const Icon = I as typeof Truck;
           return (
@@ -148,10 +148,10 @@ export function ReviewForm({ productId }: { productId: string }) {
   const [rating, setRating] = useState(5);
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [err, setErr] = useState("");
-  if (state === "done") return <p className="rounded-xl bg-[#E8F5EE] p-4 text-sm text-stock">Thank you! Your review will appear once it&apos;s approved.</p>;
+  if (state === "done") return <p className="rounded-sm bg-[#E8F5EE] p-4 text-sm text-stock">Thank you! Your review will appear once it&apos;s approved.</p>;
   return (
     <form
-      className="grid gap-3 rounded-xl bg-cream p-4 md:grid-cols-2"
+      className="grid gap-3 rounded-sm bg-cream p-4 md:grid-cols-2"
       onSubmit={async (e) => {
         e.preventDefault();
         setState("sending");

@@ -15,7 +15,7 @@ export const DEFAULT_SETTINGS = {
     "शुद्ध लकड़ी का हस्तनिर्मित फर्नीचर",
     "Secure Payments · Easy Returns",
   ],
-  marquee: ["Solid Wood", "Handcrafted", "Made to Last", "Free Shipping", "Sheesham · Teak · Mango"],
+  marquee: ["हर लकड़ी में एक कहानी", "Handcrafted Solid Wood", "Sheesham · Teak · Mango", "पीढ़ियों तक साथ", "Made to Last", "घर की शान"],
   social: { facebook: "", instagram: "", x: "", linkedin: "", youtube: "" },
   instagramHandle: "@thewoodentone",
   footerAbout: "We provide the best solid wood furniture across India & beyond — crafted to last for generations.",

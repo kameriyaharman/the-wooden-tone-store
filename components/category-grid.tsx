@@ -16,7 +16,7 @@ export function CategoryGrid({ cats }: { cats: { slug: string; name: string; ima
       <div className="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 md:gap-4">
         {shown.map((c) => (
           <Link key={c.slug} data-cursor="view" href={`/shop?category=${c.slug}`} className="card group p-2 text-center transition hover:border-teak hover:shadow-card">
-            <div className="overflow-hidden rounded-xl bg-cream">
+            <div className="overflow-hidden rounded-sm bg-cream">
               {c.image ? <img src={c.image} alt="" loading="lazy" className="aspect-square w-full object-cover transition duration-500 group-hover:scale-105" /> : <div className="aspect-square" />}
             </div>
             <p className="mt-2 pb-1 text-[12px] font-medium leading-tight md:text-[13px]">{c.name}</p>

@@ -40,11 +40,11 @@ export function CartPage({ freeAbove }: { freeAbove: number }) {
         <div className="card p-5 md:p-6">
           <h1 className="flex items-center gap-3 font-serif text-3xl font-semibold"><span className="icon-chip"><ShoppingCart className="h-4 w-4" /></span>Your Cart ({count} items)</h1>
           <div className="mt-4"><FreeShipBar subtotal={sub} freeAbove={freeAbove} /></div>
-          {otherError && <p className="mt-4 rounded-lg bg-[#FDECEE] p-3 text-sm text-sale">{otherError}</p>}
+          {otherError && <p className="mt-4 rounded-sm bg-[#FDECEE] p-3 text-sm text-sale">{otherError}</p>}
           <ul className="mt-2 divide-y divide-line">
             {items.map((it) => (
               <li key={it.key} className="flex gap-4 py-5">
-                <Link href={`/product/${it.slug}`} className="shrink-0">{it.image && <img src={it.image} alt="" className="h-20 w-20 rounded-xl object-cover md:h-24 md:w-24" />}</Link>
+                <Link href={`/product/${it.slug}`} className="shrink-0">{it.image && <img src={it.image} alt="" className="h-20 w-20 rounded-sm object-cover md:h-24 md:w-24" />}</Link>
                 <div className="grid min-w-0 flex-1 gap-2 md:grid-cols-[1fr_auto]">
                   <div>
                     <Link href={`/product/${it.slug}`} className="text-[15px] font-medium hover:text-teak-dark">{it.name}</Link>

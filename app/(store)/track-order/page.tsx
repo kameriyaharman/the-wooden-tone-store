@@ -39,7 +39,7 @@ export default async function Track({ searchParams }: { searchParams: Promise<{ 
           <div className="relative"><Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" /><input id="contact" name="contact" defaultValue={contact} required placeholder="+91 98xxx xxxxx" className="input pl-9" /></div>
           <button className="btn-gold mt-5 w-full"><Search className="h-4 w-4" /> Track Order</button>
           <p className="mt-3 text-xs text-muted">Your Order ID is in the confirmation email &amp; SMS.</p>
-          {error && <p className="mt-4 rounded-lg bg-[#FDECEE] p-3 text-sm text-sale">{error}</p>}
+          {error && <p className="mt-4 rounded-sm bg-[#FDECEE] p-3 text-sm text-sale">{error}</p>}
         </form>
         {o ? (
           <div className="card p-5 md:p-6">
@@ -54,7 +54,7 @@ export default async function Track({ searchParams }: { searchParams: Promise<{ 
               <Timeline order={o} events={o.events} />
               <div className="space-y-4">
                 <OrderItems items={o.items} />
-                <div className="rounded-xl border border-[#EADFCB] bg-tint p-3.5 text-sm">
+                <div className="rounded-sm border border-[#EADFCB] bg-tint p-3.5 text-sm">
                   <p className="font-semibold text-teak-dark">Delivery address</p>
                   <p className="text-teak-dark/90">{o.firstName} {o.lastName} · {o.city}, {o.state} {o.pincode}</p>
                 </div>

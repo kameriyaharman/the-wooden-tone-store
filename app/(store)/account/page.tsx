@@ -39,7 +39,7 @@ export default async function Account() {
               {orders.map((o) => (
                 <li key={o.id}>
                   <Link href={`/order/${o.orderNo}`} className="flex items-center gap-4 py-4 hover:bg-cream/50">
-                    <div className="flex -space-x-3">{o.items.slice(0, 3).map((i) => i.image && <img key={i.id} src={i.image} alt="" className="h-12 w-12 rounded-lg border-2 border-white object-cover" />)}</div>
+                    <div className="flex -space-x-3">{o.items.slice(0, 3).map((i) => i.image && <img key={i.id} src={i.image} alt="" className="h-12 w-12 rounded-sm border-2 border-white object-cover" />)}</div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold">#{o.orderNo}</p>
                       <p className="text-xs text-muted">{fmtDate(o.createdAt)} · {o.items.length} items · {inr(o.total)}</p>

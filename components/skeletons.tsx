@@ -1,4 +1,4 @@
-const B = ({ className = "" }: { className?: string }) => <div className={`animate-pulse rounded-lg bg-[#F1EBE1] ${className}`} />;
+const B = ({ className = "" }: { className?: string }) => <div className={`animate-pulse rounded-sm bg-[#F1EBE1] ${className}`} />;
 
 export function HeroSkeleton() {
   return (
@@ -16,7 +16,7 @@ export function HeroSkeleton() {
 export function CardSkeleton() {
   return (
     <div className="card p-2">
-      <B className="aspect-square w-full !rounded-xl" />
+      <B className="aspect-square w-full !rounded-sm" />
       <B className="mt-3 h-4 w-11/12" />
       <B className="mt-2 h-4 w-2/3" />
       <B className="mt-3 h-5 w-1/3" />
@@ -44,12 +44,12 @@ export function ProductSkeleton() {
     <div className="container-site pt-6 pb-16">
       <B className="h-3 w-56" />
       <div className="mt-6 grid gap-8 lg:grid-cols-[1.05fr_1fr]">
-        <B className="aspect-square w-full !rounded-2xl" />
+        <B className="aspect-square w-full !rounded-sm" />
         <div className="card p-6">
           <B className="h-5 w-20" />
           <B className="mt-4 h-9 w-5/6" />
           <B className="mt-2 h-9 w-3/5" />
-          <B className="mt-6 h-28 w-full !rounded-xl" />
+          <B className="mt-6 h-28 w-full !rounded-sm" />
           <B className="mt-6 h-9 w-48" />
           <B className="mt-6 h-11 w-full" />
         </div>

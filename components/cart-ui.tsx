@@ -10,7 +10,7 @@ import { inr } from "@/lib/format";
 export function QtyStepper({ value, onChange, max = 99, small }: { value: number; onChange: (n: number) => void; max?: number; small?: boolean }) {
   const h = small ? "h-8" : "h-10";
   return (
-    <div className={`inline-flex ${h} items-center rounded-lg border border-line bg-white`}>
+    <div className={`inline-flex ${h} items-center rounded-sm border border-line bg-white`}>
       <button type="button" aria-label="Decrease" className="grid h-full w-8 place-items-center text-muted hover:text-ink disabled:opacity-40" disabled={value <= 1} onClick={() => onChange(value - 1)}><Minus className="h-3.5 w-3.5" /></button>
       <span className="w-7 text-center text-sm font-semibold tabular-nums">{value}</span>
       <button type="button" aria-label="Increase" className="grid h-full w-8 place-items-center text-muted hover:text-ink disabled:opacity-40" disabled={value >= max} onClick={() => onChange(value + 1)}><Plus className="h-3.5 w-3.5" /></button>
@@ -22,7 +22,7 @@ export function FreeShipBar({ subtotal, freeAbove }: { subtotal: number; freeAbo
   const unlocked = freeAbove <= 0 || subtotal >= freeAbove;
   const pct = freeAbove <= 0 ? 100 : Math.min(100, (subtotal / freeAbove) * 100);
   return (
-    <div className="rounded-xl bg-tint px-4 py-3">
+    <div className="rounded-sm bg-tint px-4 py-3">
       <p className="flex items-center gap-2 text-[13px] font-semibold text-teak-dark">
         <Truck className="h-4 w-4" />
         {unlocked ? "Yay! Your order qualifies for FREE delivery." : `Add ${inr(freeAbove - subtotal)} more for FREE delivery.`}
@@ -64,7 +64,7 @@ export function CartDrawer({ freeAbove, loggedIn }: { freeAbove: number; loggedI
               <ul className="mt-3 divide-y divide-line">
                 {items.map((it) => (
                   <li key={it.key} className="flex gap-3 py-4">
-                    <Link href={`/product/${it.slug}`}>{it.image && <img src={it.image} alt="" className="h-[72px] w-[72px] rounded-lg object-cover" />}</Link>
+                    <Link href={`/product/${it.slug}`}>{it.image && <img src={it.image} alt="" className="h-[72px] w-[72px] rounded-sm object-cover" />}</Link>
                     <div className="min-w-0 flex-1">
                       <div className="flex gap-2">
                         <Link href={`/product/${it.slug}`} className="line-clamp-2 flex-1 text-sm font-medium">{it.name}</Link>
@@ -79,7 +79,7 @@ export function CartDrawer({ freeAbove, loggedIn }: { freeAbove: number; loggedI
               </ul>
             </div>
             <div className="border-t border-line bg-cream/60 px-5 py-4">
-              <Link href="/cart" className="mb-3 flex items-center gap-2 rounded-lg border border-dashed border-[#DCCDB4] bg-white px-3 py-2.5 text-[13px] text-muted">
+              <Link href="/cart" className="mb-3 flex items-center gap-2 rounded-sm border border-dashed border-[#DCCDB4] bg-white px-3 py-2.5 text-[13px] text-muted">
                 <Tag className="h-4 w-4" /> Have a coupon? Apply it in your cart{loggedIn ? "" : ""}
               </Link>
               <div className="flex justify-between text-sm text-muted"><span>Subtotal</span><span className="text-ink">{inr(subtotal)}</span></div>
@@ -102,7 +102,7 @@ export function Toast() {
   if (!toast) return null;
   return (
     <div className="pointer-events-none fixed bottom-24 left-1/2 z-[80] -translate-x-1/2 lg:bottom-8">
-      <div className="flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-medium shadow-xl ring-1 ring-line">
+      <div className="flex items-center gap-2 rounded-sm bg-white px-4 py-2.5 text-sm font-medium shadow-xl ring-1 ring-line">
         <Check className="h-4 w-4 text-stock" /> {toast}
       </div>
     </div>

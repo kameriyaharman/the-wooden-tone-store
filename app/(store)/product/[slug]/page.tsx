@@ -59,7 +59,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const defSize = p.sizes.find((x) => x.priceDelta === 0) || p.sizes[0];
   const specLine = [p.woodType && `${p.woodType} Wood`, defSize && `${defSize.name} Size`].filter(Boolean).join(" · ");
   const specs = (
-    <table className="w-full overflow-hidden rounded-xl text-sm">
+    <table className="w-full overflow-hidden rounded-sm text-sm">
       <tbody>
         {p.specs.map((x) => (
           <tr key={x.label} className="border-b border-line last:border-0">

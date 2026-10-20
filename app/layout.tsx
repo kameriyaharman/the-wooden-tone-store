@@ -1,3 +1,12 @@
+import "@fontsource/cormorant-garamond/400.css";
+import "@fontsource/cormorant-garamond/500.css";
+import "@fontsource/cormorant-garamond/600.css";
+import "@fontsource/cormorant-garamond/400-italic.css";
+import "@fontsource/cormorant-garamond/500-italic.css";
+import "@fontsource/jost/300.css";
+import "@fontsource/jost/400.css";
+import "@fontsource/jost/500.css";
+import "@fontsource/noto-serif-devanagari/400.css";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
@@ -15,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
     icons: { icon: "/seed/logo-square.png" },
   };
 }
-export const viewport: Viewport = { themeColor: "#3A2411", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#2A1F17", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

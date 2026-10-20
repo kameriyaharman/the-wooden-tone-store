@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { unstable_cache } from "next/cache";
 import { and, asc, desc, eq } from "drizzle-orm";
-import { ArrowRight, Headphones, Lock, RefreshCw, Truck, MessageSquare, Star } from "lucide-react";
+import { ArrowRight, Headphones, Lock, RefreshCw, Truck, Star } from "lucide-react";
 import { db, schema as s } from "@/lib/db";
-import { cardCols, listProducts } from "@/lib/catalog";
+import { cardCols, listProducts, navData } from "@/lib/catalog";
 import { getSettings } from "@/lib/settings";
-import { ProductCard } from "@/components/product-card";
-import { FaqList, HeroSlider, Scroller } from "@/components/home-client";
+import { FaqList, HeroSlider, ProductTabs, TaglineMarquee, WhyChoose } from "@/components/home-client";
 import { SectionHead, Paragraphs } from "@/components/ui";
 import { InstagramIcon } from "@/components/icons";
-import { inr, pctOff } from "@/lib/format";
+import { inr } from "@/lib/format";
 
 const homeData = unstable_cache(() =>
   Promise.all([
@@ -18,89 +17,124 @@ const homeData = unstable_cache(() =>
     db.select().from(s.categories).where(and(eq(s.categories.featured, true), eq(s.categories.active, true))).orderBy(asc(s.categories.sortOrder)),
     db.select(cardCols).from(s.products).where(and(eq(s.products.trending, true), eq(s.products.active, true))).orderBy(asc(s.products.sortOrder)).limit(10),
     db.select(cardCols).from(s.products).where(and(eq(s.products.featured, true), eq(s.products.active, true))).orderBy(asc(s.products.sortOrder)).limit(4),
+    db.select(cardCols).from(s.products).where(eq(s.products.active, true)).orderBy(desc(s.products.createdAt)).limit(8),
     db.select().from(s.reviews).where(and(eq(s.reviews.approved, true), eq(s.reviews.showOnHome, true))).orderBy(desc(s.reviews.createdAt)).limit(8),
     db.select().from(s.faqs).where(eq(s.faqs.active, true)).orderBy(asc(s.faqs.sortOrder)),
     db.$count(s.categories, eq(s.categories.active, true)),
   ]),
   ["home-data"], { tags: ["catalog", "settings"], revalidate: 120 });
 
+const WHY = [
+  { title: "Every Grain Has a Story", text: "Seasoned sheesham, teak and mango wood, shaped by Saharanpur craftsmen whose families have worked wood for generations.", tags: "Handcrafted • Solid Wood • Timeless" },
+  { title: "Made to Be Lived In", text: "Sturdy joinery, hand-rubbed finishes and honest proportions — furniture built for real homes, everyday use and family dinners.", tags: "Durable • Practical • Warm" },
+  { title: "Crafted for Today's Home", text: "Rooted in tradition yet designed for modern living, and made to your size when you need something truly your own.", tags: "Custom Sizes • Free Shipping • Easy Returns" },
+];
+
 export default async function Home() {
   const st = await getSettings();
-  const [heroes, promos, featuredCats, trending, featured, reviews, faqs, catCount] = await homeData();
+  const [[heroes, promos, featuredCats, trending, featured, newest, reviews, faqs, catCount], rooms] = await Promise.all([homeData(), navData()]);
   const rows = await Promise.all((st.homeSections || []).map(async (sec) => ({ sec, items: (await listProducts({ category: sec.categories.join(",") })).items })));
-  const spot = featured[0];
+  const edits = rooms.filter((r) => r.image || r.categories[0]?.image).slice(0, 3);
   const insta = (st as { instagramImages?: string[] }).instagramImages?.length
     ? (st as { instagramImages: string[] }).instagramImages
     : [...trending, ...featured].map((p) => p.images[0]).filter(Boolean).slice(0, 6);
 
   return (
     <>
-      <HeroSlider
-        slides={heroes}
-        marquee={st.marquee}
-        spotlight={spot ? { name: spot.name.replace(/^The Wooden Tone /, ""), slug: spot.slug, price: inr(spot.price), image: spot.images[0], label: `Bestseller · ${pctOff(spot.price, spot.mrp)}% off` } : null}
-      />
+      <HeroSlider slides={heroes} />
+      <TaglineMarquee words={st.marquee} />
 
-      {/* Trending */}
-      {trending.length > 0 && (
+      {/* What are you looking for */}
+      {featuredCats.length > 0 && (
         <section className="container-site py-16 md:py-20">
-          <div className="flex items-end justify-between">
-            <SectionHead eyebrow="Now trending" title="Pieces worth lingering on" sub="Our most-loved designs this season." />
-            <Link href="/shop?sort=featured" className="mb-1 text-[13px] font-semibold text-teak-dark hover:underline max-md:hidden">View all ↗</Link>
-          </div>
-          <Scroller className="mt-2">
-            {trending.map((p) => (
-              <Link key={p.id} href={`/product/${p.slug}`} data-cursor="view" className="group relative w-[68%] shrink-0 snap-start overflow-hidden rounded-2xl sm:w-[40%] md:w-[calc(20%-13px)]">
-                <img src={p.images[0]} alt="" className="aspect-[3/4] w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#E9B85E]">Trending</p>
-                  <p className="mt-1 font-serif text-xl font-semibold leading-tight">{p.name.replace(/^The Wooden Tone /, "")}</p>
-                  <p className="mt-1 text-xs text-white/85">{inr(p.price)}</p>
+          <SectionHead center title="What Are You Looking For ?" />
+          <div className="no-scrollbar -mx-4 mt-10 flex gap-4 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:justify-center md:gap-6 md:overflow-visible md:px-0">
+            {featuredCats.map((c) => (
+              <Link key={c.id} href={`/shop?category=${c.slug}`} className="group w-[38%] shrink-0 text-center sm:w-[24%] md:w-[calc(25%-18px)] lg:w-[calc(12.5%-21px)]">
+                <div className="arch overflow-hidden bg-cream">
+                  <img src={c.image || ""} alt="" className="aspect-[3/4] w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
                 </div>
+                <p className="mt-3 text-[12px] font-medium uppercase tracking-[0.2em] transition-colors group-hover:text-teak-dark">{c.name}</p>
               </Link>
             ))}
-          </Scroller>
+          </div>
+          <div className="mt-10 text-center"><Link href="/categories" className="btn-outline">All categories</Link></div>
         </section>
       )}
 
-      {/* Category rows */}
-      <div className="container-site space-y-16 py-16 md:py-20">
-        {rows.filter((r) => r.items.length).map(({ sec, items }) => (
-          <section key={sec.title}>
-            <SectionHead eyebrow={sec.eyebrow} title={sec.title} href={`/shop?category=${sec.categories.join(",")}`} />
-            <div className="no-scrollbar -mx-4 mt-6 flex snap-x gap-3 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-5 md:gap-4 md:px-0">
-              {items.slice(0, 5).map((p) => (
-                <div key={p.id} className="w-[46%] shrink-0 snap-start sm:w-[31%] md:w-auto"><ProductCard p={p} /></div>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
+      {/* Category tabs (admin: Settings → homepage sections) */}
+      {rows.some((r) => r.items.length) && (
+        <section className="container-site pb-16 md:pb-20">
+          <ProductTabs
+            title="Curated For Your Home"
+            eyebrow="Shop the collection"
+            tabs={rows.map(({ sec, items }) => ({ label: sec.title, href: `/shop?category=${sec.categories.join(",")}`, items }))}
+          />
+        </section>
+      )}
 
-      {/* Categories */}
-      <section className="container-site py-16 md:py-20">
-        <SectionHead center eyebrow="Browse by category" title="Our Product Categories" sub={`${catCount}+ categories for every room — from beds and wardrobes to spice racks and pooja décor.`} />
-        <div className="no-scrollbar -mx-4 mt-10 flex gap-4 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-8 md:px-0">
-          {featuredCats.map((c) => (
-            <Link key={c.id} href={`/shop?category=${c.slug}`} className="group w-24 shrink-0 text-center md:w-auto">
-              <div className="rounded-2xl border border-line bg-cream p-1.5 transition group-hover:border-teak">
-                <img src={c.image || ""} alt="" className="aspect-square w-full rounded-xl object-cover" loading="lazy" />
+      {/* Promo banners */}
+      {promos.length > 0 && (
+        <section className="grid gap-px bg-line md:grid-cols-2">
+          {promos.map((b) => (
+            <Link key={b.id} data-cursor="view" href={b.ctaLink || "/shop"} className="group relative block h-[360px] overflow-hidden md:h-[520px]">
+              <img src={b.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-1000 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+              <div className="relative flex h-full flex-col items-center justify-end p-8 text-center text-white md:p-12">
+                {b.eyebrow && <p className="text-[11px] font-medium uppercase tracking-[0.3em] text-[#D9BC86]">{b.eyebrow}</p>}
+                <h3 className="mt-2 max-w-md font-serif text-[34px] font-medium leading-tight md:text-[44px]">{b.title}</h3>
+                {b.subtitle && <p className="mt-2 text-sm font-light text-white/85">{b.subtitle}</p>}
+                {b.ctaLabel && <span className="mt-5 border-b border-white pb-1 text-[11px] font-medium uppercase tracking-[0.24em]">{b.ctaLabel}</span>}
               </div>
-              <p className="mt-2 text-[13px] font-medium">{c.name}</p>
             </Link>
           ))}
+        </section>
+      )}
+
+      {/* Why choose */}
+      <section className="bg-cream">
+        <div className="container-site py-16 md:py-24">
+          <SectionHead center title={`Why Choose ${st.storeName.replace(/^The /, "")}`} sub="Every piece is a celebration of India's woodworking heritage — made for homes that value craftsmanship, honesty and furniture that lasts." />
+          <div className="mt-12"><WhyChoose items={WHY} /></div>
         </div>
-        <div className="mt-8 text-center"><Link href="/categories" className="btn-outline">View all categories <ArrowRight className="h-4 w-4" /></Link></div>
       </section>
 
-      {/* Featured collection */}
+      {/* Bestsellers / New arrivals */}
+      {(trending.length > 0 || newest.length > 0) && (
+        <section className="container-site py-16 md:py-20">
+          <ProductTabs
+            tabs={[
+              { label: "Bestsellers", href: "/shop?sort=featured", items: trending },
+              { label: "New Arrivals", href: "/shop?sort=new", items: newest },
+            ]}
+          />
+        </section>
+      )}
+
+      {/* Lifestyle edits by room */}
+      {edits.length > 0 && (
+        <section className="container-site pb-16 md:pb-20">
+          <div className={`grid gap-4 md:gap-6 ${edits.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+            {edits.map((r) => (
+              <Link key={r.slug} data-cursor="view" href={`/shop?room=${r.slug}`} className="group relative block overflow-hidden">
+                <img src={r.image || r.categories[0]?.image || ""} alt="" className="aspect-[4/5] w-full object-cover transition duration-1000 group-hover:scale-105" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center p-7 text-center text-white">
+                  <h3 className="font-serif text-[30px] font-medium uppercase tracking-[0.12em]">{r.name}</h3>
+                  <span className="mt-3 border-b border-white pb-1 text-[11px] font-medium uppercase tracking-[0.24em]">Shop now</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Spotlight */}
       {featured.length >= 2 && (
         <section className="bg-cream">
           <div className="container-site py-16 md:py-20">
-            <p className="eyebrow !text-muted">Featured</p>
-            <h2 className="h-display mt-2 text-[34px] md:text-[44px]">A small collection. A big impression.</h2>
-            <div className="mt-8 grid gap-4 md:grid-cols-[1.55fr_1fr]">
+            <SectionHead center eyebrow="The Spotlight" title="A Small Collection, A Big Impression" />
+            <div className="mt-10 grid gap-4 md:grid-cols-[1.55fr_1fr]">
               <FeatureTile p={featured[0]} big />
               <div className="grid gap-4">
                 {featured.slice(1, 4).map((p) => <FeatureTile key={p.id} p={p} />)}
@@ -110,72 +144,18 @@ export default async function Home() {
         </section>
       )}
 
-      {/* Promo banners */}
-      {promos.length > 0 && (
-        <section className="grid md:grid-cols-2">
-          {promos.map((b) => (
-            <Link key={b.id} data-cursor="view" href={b.ctaLink || "/shop"} className="group relative block h-[300px] overflow-hidden md:h-[420px]">
-              <img src={b.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/10" />
-              <div className="relative flex h-full flex-col justify-center p-8 text-white md:p-12">
-                {b.eyebrow && <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#E9B85E]">{b.eyebrow}</p>}
-                <h3 className="h-display mt-2 max-w-sm text-[34px] md:text-[42px]">{b.title}</h3>
-                {b.subtitle && <p className="mt-2 text-sm text-white/85">{b.subtitle}</p>}
-                {b.ctaLabel && <span className="mt-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em]">{b.ctaLabel} <ArrowRight className="h-4 w-4" /></span>}
-              </div>
-            </Link>
-          ))}
-        </section>
-      )}
-
-      {/* Story */}
-      <section className="bg-cream">
-        <div className="container-site grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
-          <div>
-            <p className="eyebrow">Our story</p>
-            <h2 className="h-display mt-3 text-[38px] md:text-[48px]">{st.storyHeading}</h2>
-            <Paragraphs text={st.storyText} className="mt-4 text-[15px] text-muted" />
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              {[
-                [Headphones, "24/7 Support", "Talk to us anytime"],
-                [Lock, "Secure Shopping", "Encrypted payments"],
-                [Truck, "Free Shipping", "Across India"],
-                [RefreshCw, "Money Return", "Hassle-free refunds"],
-              ].map(([Icon, t, d]) => {
-                const I = Icon as typeof Truck;
-                return (
-                  <div key={t as string} className="card flex items-center gap-3 p-3.5">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-tint text-teak-dark"><I className="h-4 w-4" /></span>
-                    <span><span className="block text-sm font-bold">{t as string}</span><span className="text-xs text-muted">{d as string}</span></span>
-                  </div>
-                );
-              })}
-            </div>
-            <Link href="/about" className="btn-gold mt-7">Read More <ArrowRight className="h-4 w-4" /></Link>
-          </div>
-          <div className="relative mx-auto w-full max-w-md md:max-w-none">
-            <img src={st.aboutImage} alt="" className="ml-auto aspect-[4/5] w-[78%] rounded-3xl object-cover" />
-            <div className="float-slow absolute left-0 top-8 rounded-2xl bg-walnut px-5 py-4 text-white shadow-xl">
-              <p className="font-serif text-4xl font-semibold text-teak">{catCount}+</p>
-              <p className="text-xs text-white/80">categories of handcrafted<br />furniture &amp; décor</p>
-            </div>
-            {featured[1] && <img src={featured[1].images[0]} alt="" className="absolute -bottom-6 left-[6%] aspect-square w-[42%] rounded-2xl border-[6px] border-white object-cover shadow-xl" />}
-          </div>
-        </div>
-      </section>
-
       {/* Reviews */}
       {reviews.length > 0 && (
         <section className="container-site py-16 md:py-20">
-          <SectionHead center eyebrow="Customer stories" title="What Our Happy Customers Say" />
-          <div className="no-scrollbar -mx-4 mt-10 flex snap-x gap-4 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-4 md:px-0">
+          <SectionHead center eyebrow="Customer stories" title="Loved in Homes Across India" />
+          <div className="no-scrollbar -mx-4 mt-10 flex snap-x gap-4 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-4 md:gap-6 md:px-0">
             {reviews.map((r) => (
-              <figure key={r.id} className="card w-[80%] shrink-0 snap-start p-5 md:w-auto">
-                <div className="flex">{[1, 2, 3, 4, 5].map((i) => <Star key={i} className={`h-3.5 w-3.5 ${i <= r.rating ? "fill-teak text-teak" : "text-line"}`} />)}</div>
-                <blockquote className="mt-3 text-sm leading-relaxed text-ink">“{r.text}”</blockquote>
-                <figcaption className="mt-4 flex items-center gap-3">
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-tint font-bold text-teak-dark">{r.name[0]}</span>
-                  <span><span className="block text-sm font-bold">{r.name}</span><span className="text-xs text-muted">{r.city}</span></span>
+              <figure key={r.id} className="w-[80%] shrink-0 snap-start border border-line bg-white p-6 text-center md:w-auto">
+                <div className="flex justify-center">{[1, 2, 3, 4, 5].map((i) => <Star key={i} className={`h-3.5 w-3.5 ${i <= r.rating ? "fill-teak text-teak" : "text-line"}`} />)}</div>
+                <blockquote className="mt-4 font-serif text-[18px] italic leading-relaxed text-ink">“{r.text}”</blockquote>
+                <figcaption className="mt-5">
+                  <span className="block text-[12px] font-medium uppercase tracking-[0.2em]">{r.name}</span>
+                  <span className="text-xs text-muted">{r.city}</span>
                 </figcaption>
               </figure>
             ))}
@@ -183,20 +163,55 @@ export default async function Home() {
         </section>
       )}
 
+      {/* Story */}
+      <section className="border-y border-line bg-ivory">
+        <div className="container-site grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
+          <div className="relative mx-auto w-full max-w-md md:order-2 md:max-w-none">
+            <img src={st.aboutImage} alt="" className="arch ml-auto aspect-[4/5] w-[80%] object-cover" />
+            <div className="float-slow absolute left-0 top-10 bg-ink px-6 py-5 text-white shadow-xl">
+              <p className="font-serif text-5xl font-medium text-[#D9BC86]">{catCount}+</p>
+              <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-white/80">categories of<br />handcrafted furniture</p>
+            </div>
+          </div>
+          <div>
+            <p className="eyebrow">Our story</p>
+            <h2 className="mt-3 font-serif text-[38px] font-medium leading-[1.1] md:text-[50px]">{st.storyHeading}</h2>
+            <Paragraphs text={st.storyText} className="mt-5 text-[15px] text-muted" />
+            <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-line pt-6">
+              {[
+                [Headphones, "Personal Support", "Talk to us anytime"],
+                [Lock, "Secure Shopping", "Encrypted payments"],
+                [Truck, "Free Shipping", "Across India"],
+                [RefreshCw, "Easy Returns", "Hassle-free refunds"],
+              ].map(([Icon, t, d]) => {
+                const I = Icon as typeof Truck;
+                return (
+                  <div key={t as string} className="flex items-start gap-3">
+                    <I className="mt-0.5 h-5 w-5 shrink-0 text-teak" strokeWidth={1.5} />
+                    <span><span className="block text-[12px] font-medium uppercase tracking-[0.14em]">{t as string}</span><span className="text-[13px] text-muted">{d as string}</span></span>
+                  </div>
+                );
+              })}
+            </div>
+            <Link href="/about" className="btn-dark mt-8">Read our story <ArrowRight className="h-4 w-4" /></Link>
+          </div>
+        </div>
+      </section>
+
       {/* Custom order CTA */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#3A2411] to-[#1D140C] text-white">
-        <div className="absolute left-1/2 top-0 h-64 w-[600px] -translate-x-1/2 rounded-full bg-teak/25 blur-3xl" />
+      <section className="relative overflow-hidden bg-ink text-white">
+        {st.customOrderImage && <img src={st.customOrderImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-30" loading="lazy" />}
         <div className="container-site relative py-20 text-center md:py-28">
-          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#E9B85E]">Custom orders</p>
-          <h2 className="h-display mx-auto mt-4 max-w-3xl text-[38px] md:text-[56px]">Get Your Design Crafted in Solid Wood</h2>
-          <p className="mx-auto mt-4 max-w-lg text-[15px] text-white/80">Share a photo or sketch — our craftsmen will build it to your size and finish.</p>
-          <Link href="/custom-order" className="btn mt-8 bg-white text-ink hover:bg-cream">Start a Custom Order <ArrowRight className="h-4 w-4" /></Link>
+          <p className="text-[11px] font-medium uppercase tracking-[0.3em] text-[#D9BC86]">Custom orders</p>
+          <h2 className="mx-auto mt-4 max-w-3xl font-serif text-[38px] font-medium leading-tight md:text-[58px]">Your Design, Crafted in Solid Wood</h2>
+          <p className="mx-auto mt-4 max-w-lg text-[15px] font-light text-white/80">Share a photo or sketch — our craftsmen will build it to your size and finish.</p>
+          <Link href="/custom-order" className="btn mt-8 bg-white text-ink hover:bg-ivory">Start a custom order</Link>
         </div>
       </section>
 
       {/* FAQ */}
       {faqs.length > 0 && (
-        <section id="faq" className="container-site scroll-mt-28 py-16 md:py-20">
+        <section id="faq" className="container-site scroll-mt-40 py-16 md:py-20">
           <SectionHead center eyebrow="FAQ" title="Frequently Asked Questions" />
           <FaqList items={faqs} />
         </section>
@@ -206,10 +221,10 @@ export default async function Home() {
       {insta.length > 0 && (
         <section className="container-site pb-16 md:pb-20">
           <SectionHead center eyebrow={st.instagramHandle} title="Follow Us on Instagram" />
-          <div className="mt-8 grid grid-cols-3 gap-2 md:grid-cols-6 md:gap-3">
+          <div className="mt-10 grid grid-cols-3 gap-1.5 md:grid-cols-6 md:gap-2">
             {insta.map((src, i) => (
-              <a key={i} href={st.social?.instagram || "#"} target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-xl">
-                <img src={src} alt="" className="aspect-square w-full object-cover transition group-hover:scale-105" loading="lazy" />
+              <a key={i} href={st.social?.instagram || "#"} target="_blank" rel="noreferrer" className="group relative overflow-hidden">
+                <img src={src} alt="" className="aspect-square w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
                 <span className="absolute inset-0 grid place-items-center bg-black/0 text-white opacity-0 transition group-hover:bg-black/30 group-hover:opacity-100"><InstagramIcon className="h-6 w-6" /></span>
               </a>
             ))}
@@ -222,12 +237,12 @@ export default async function Home() {
 
 function FeatureTile({ p, big = false }: { p: { slug: string; name: string; price: number; images: string[] }; big?: boolean }) {
   return (
-    <Link data-cursor="view" href={`/product/${p.slug}`} className={`group relative block overflow-hidden rounded-2xl ${big ? "h-[420px] md:h-full md:min-h-[520px]" : "h-[160px] md:h-auto md:min-h-[164px]"}`}>
+    <Link data-cursor="view" href={`/product/${p.slug}`} className={`group relative block overflow-hidden ${big ? "h-[420px] md:h-full md:min-h-[520px]" : "h-[160px] md:h-auto md:min-h-[164px]"}`}>
       <img src={p.images[0]} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
       <div className="absolute bottom-0 p-5 text-white md:p-6">
-        {big && <p className="text-[10px] font-bold uppercase tracking-widest text-[#E9B85E]">Spotlight</p>}
-        <p className={`font-serif font-semibold leading-tight ${big ? "mt-1 text-3xl md:text-4xl" : "text-xl"}`}>{p.name.replace(/^The Wooden Tone /, "")}</p>
+        {big && <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#D9BC86]">Spotlight</p>}
+        <p className={`font-serif font-medium leading-tight ${big ? "mt-1 text-3xl md:text-4xl" : "text-xl"}`}>{p.name.replace(/^The Wooden Tone /, "")}</p>
         <p className="mt-1 text-xs text-white/85">{inr(p.price)}</p>
       </div>
     </Link>
