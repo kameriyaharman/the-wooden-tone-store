@@ -31,7 +31,7 @@ export function Logo({ compact = false, storeName, tagline }: { compact?: boolea
         <>
           <img src="/seed/logo.png" alt="" className="h-10 w-auto transition-all duration-300 group-data-[scrolled]/hdr:h-8" />
           <span className="mt-1 whitespace-nowrap font-serif text-[24px] font-semibold uppercase leading-none tracking-[0.2em] text-ink transition-all duration-300 group-data-[scrolled]/hdr:text-[20px]">{storeName}</span>
-          <span className="mt-1.5 whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.42em] text-teak transition-all duration-300 group-data-[scrolled]/hdr:hidden">{tagline}</span>
+          <span className="mt-1.5 whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.34em] text-teak-dark transition-all duration-300 group-data-[scrolled]/hdr:hidden">{tagline}</span>
         </>
       )}
     </Link>
@@ -51,7 +51,7 @@ export function AnnouncementBar({ items }: { items: string[] }) {
   return (
     <div className="bg-ink text-white">
       <div className="container-site flex h-9 items-center justify-center">
-        <p key={i} className="animate-ann-in truncate text-center text-[11px] font-medium uppercase tracking-[0.22em]">{items[i]}</p>
+        <p key={i} className="animate-ann-in truncate text-center text-[12px] font-medium uppercase tracking-[0.16em]">{items[i]}</p>
       </div>
     </div>
   );
@@ -161,7 +161,7 @@ function MegaMenu({ rooms, onClose }: { rooms: NavRoom[]; onClose: () => void })
         </div>
         <div className="bg-cream p-3">
           <img src={room.image || room.categories[0]?.image || "/seed/banners/hero-sofa.jpg"} alt="" className="h-40 w-full object-cover" />
-          <p className="mt-3 font-serif text-2xl font-medium">{room.name} Edit</p>
+          <p className="mt-3 font-serif text-2xl font-semibold">{room.name} Edit</p>
           <p className="mt-1 text-xs text-muted">{room.description}</p>
           <Link href={`/shop?room=${room.slug}`} onClick={onClose} className="btn-outline btn-sm mt-3">
             Shop section <ArrowRight className="h-3.5 w-3.5" />
@@ -235,7 +235,7 @@ export function Header({ rooms, storeName, tagline, whatsapp, loggedIn }: Props)
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
   const link = (on: boolean) =>
-    `nav-link whitespace-nowrap px-3 py-1.5 text-[12px] font-medium uppercase tracking-[0.16em] transition ${on ? "text-teak-dark" : "text-ink hover:text-teak-dark"}`;
+    `nav-link whitespace-nowrap px-3 py-1.5 text-[13px] font-medium uppercase tracking-[0.12em] transition ${on ? "text-teak-dark" : "text-ink hover:text-teak-dark"}`;
   const icon = "relative p-2 transition hover:text-teak-dark";
   const badge = "badge-pop absolute right-0 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-teak px-1 text-[9px] font-semibold text-white";
 

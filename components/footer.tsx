@@ -12,7 +12,7 @@ export function Footer({ st }: { st: PublicSettings }) {
     { href: st.social?.linkedin, Icon: LinkedinIcon, label: "LinkedIn" },
     { href: (st.social as { youtube?: string })?.youtube, Icon: YoutubeIcon, label: "YouTube" },
   ].filter((x) => x.href);
-  const col = "text-[12px] font-medium uppercase tracking-[0.22em] text-ink";
+  const col = "text-[13px] font-semibold uppercase tracking-[0.16em] text-ink";
   const lnk = "block py-1.5 text-[14px] text-muted transition-colors duration-200 hover:text-teak-dark";
   return (
     <footer className="pb-16 lg:pb-0">
@@ -24,7 +24,7 @@ export function Footer({ st }: { st: PublicSettings }) {
               <img src="/seed/logo.png" alt={st.storeName} className="h-12 w-auto" />
               <span className="mt-2 font-serif text-[22px] font-semibold uppercase tracking-[0.18em]">{st.storeName}</span>
             </Link>
-            <p className="mt-4 max-w-[280px] font-serif text-[17px] italic leading-relaxed text-muted">{st.footerAbout}</p>
+            <p className="mt-4 max-w-[280px] text-[14px] leading-relaxed text-muted">{st.footerAbout}</p>
             {social.length > 0 && (
               <div className="mt-5 flex gap-2">
                 {social.map(({ href, Icon, label }) => (

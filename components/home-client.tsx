@@ -24,11 +24,11 @@ export function HeroSlider({ slides }: { slides: Slide[] }) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/10" />
             <div className="container-site relative flex h-full flex-col items-center justify-end pb-20 text-center md:pb-24">
               {s.eyebrow && <p className="text-[11px] font-medium uppercase tracking-[0.34em] text-[#D9BC86]">{s.eyebrow}</p>}
-              <h1 className="mt-3 max-w-3xl font-serif text-[40px] font-medium leading-[1.05] md:text-[68px]">
+              <h1 className="mt-3 max-w-3xl font-serif text-[40px] font-semibold leading-[1.05] md:text-[68px]">
                 {s.title}
-                {s.highlight && <> <em className="font-normal text-[#D9BC86]">{s.highlight}</em></>}
+                {s.highlight && <> <em className="font-medium text-[#D9BC86]">{s.highlight}</em></>}
               </h1>
-              {s.subtitle && <p className="mt-3 max-w-lg text-[15px] font-light text-white/85">{s.subtitle}</p>}
+              {s.subtitle && <p className="mt-3 max-w-lg text-[15px] font-normal text-white/85">{s.subtitle}</p>}
               <div className="mt-7 flex flex-wrap justify-center gap-3">
                 {s.ctaLabel && s.ctaLink && <Link href={s.ctaLink} className="btn bg-white text-ink hover:bg-ivory">{s.ctaLabel}</Link>}
                 {s.cta2Label && s.cta2Link && <Link href={s.cta2Link} className="btn border border-white/70 text-white hover:bg-white hover:text-ink">{s.cta2Label}</Link>}
@@ -58,7 +58,7 @@ export function TaglineMarquee({ words }: { words: string[] }) {
   const run = [...words, ...words, ...words, ...words];
   return (
     <div className="overflow-hidden border-b border-line bg-cream">
-      <div className="flex w-max animate-marquee-slow gap-8 whitespace-nowrap py-4 font-serif text-[20px] italic text-ink/85 md:text-[22px]">
+      <div className="flex w-max animate-marquee-slow gap-8 whitespace-nowrap py-4 font-serif text-[21px] font-medium italic text-ink md:text-[23px]">
         {run.map((w, k) => <span key={k} className="flex items-center gap-8">{w}<span className="not-italic text-teak">/</span></span>)}
       </div>
     </div>
@@ -86,7 +86,7 @@ export function ProductTabs({ tabs, title, eyebrow }: { tabs: { label: string; h
             role="tab"
             aria-selected={k === t}
             onClick={() => setT(k)}
-            className={`shrink-0 border-b pb-2 text-[13px] font-medium uppercase tracking-[0.2em] transition md:text-[14px] ${k === t ? "border-ink text-ink" : "border-transparent text-muted hover:text-ink"}`}
+            className={`shrink-0 border-b-2 pb-2 text-[13px] font-medium uppercase tracking-[0.16em] transition md:text-[14px] ${k === t ? "border-ink text-ink" : "border-transparent text-muted hover:text-ink"}`}
           >
             {x.label}
           </button>
@@ -109,10 +109,10 @@ export function WhyChoose({ items }: { items: { title: string; text: string; tag
       <div ref={ref} className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0">
         {items.map((it, k) => (
           <article key={it.title} className="w-[84%] shrink-0 snap-start border border-line bg-ivory p-7 md:w-auto md:p-9">
-            <p className="font-serif text-[56px] font-medium leading-none text-teak/70">{String(k + 1).padStart(2, "0")}</p>
-            <h3 className="mt-4 font-serif text-[26px] font-medium leading-tight">{it.title}</h3>
+            <p className="font-serif text-[56px] font-semibold leading-none text-teak/70">{String(k + 1).padStart(2, "0")}</p>
+            <h3 className="mt-4 font-serif text-[26px] font-semibold leading-tight">{it.title}</h3>
             <p className="mt-3 text-[15px] leading-relaxed text-muted">{it.text}</p>
-            <p className="mt-5 font-serif text-[16px] italic text-teak-dark">{it.tags}</p>
+            <p className="mt-5 text-[13px] font-medium uppercase tracking-[0.12em] text-teak-dark">{it.tags}</p>
           </article>
         ))}
       </div>
@@ -149,7 +149,7 @@ export function FaqList({ items }: { items: { id: string; question: string; answ
     <div className="mx-auto mt-8 max-w-3xl border-t border-line">
       {items.map((f) => (
         <div key={f.id} className="border-b border-line">
-          <button onClick={() => setOpen(open === f.id ? null : f.id)} className="flex w-full items-center justify-between gap-4 px-1 py-5 text-left font-serif text-[20px] font-medium" aria-expanded={open === f.id}>
+          <button onClick={() => setOpen(open === f.id ? null : f.id)} className="flex w-full items-center justify-between gap-4 px-1 py-5 text-left font-serif text-[20px] font-semibold" aria-expanded={open === f.id}>
             {f.question}
             <ChevronDown className={`h-4 w-4 shrink-0 transition ${open === f.id ? "rotate-180" : ""}`} />
           </button>

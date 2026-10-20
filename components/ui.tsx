@@ -42,7 +42,7 @@ export function PageHero({ eyebrow, title, sub, crumbs }: { eyebrow: string; tit
       <div className="container-site flex flex-col items-center py-10 text-center md:py-14">
         <Breadcrumbs items={crumbs} />
         <p className="eyebrow mt-5">{eyebrow}</p>
-        <h1 className="mt-2 font-serif text-[34px] font-medium uppercase leading-tight tracking-[0.08em] md:text-[48px]">{title}</h1>
+        <h1 className="mt-2 font-serif text-[34px] font-semibold uppercase leading-tight tracking-[0.08em] md:text-[48px]">{title}</h1>
         <span className="ornament" aria-hidden><span className="text-[10px]">✦</span></span>
         {sub && <p className="mt-3 max-w-xl text-[15px] text-muted">{sub}</p>}
       </div>

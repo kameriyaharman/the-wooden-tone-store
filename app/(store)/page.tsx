@@ -54,7 +54,7 @@ export default async function Home() {
                 <div className="arch overflow-hidden bg-cream">
                   <img src={c.image || ""} alt="" className="aspect-[3/4] w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
                 </div>
-                <p className="mt-3 text-[12px] font-medium uppercase tracking-[0.2em] transition-colors group-hover:text-teak-dark">{c.name}</p>
+                <p className="mt-3 text-[13px] font-medium uppercase tracking-[0.14em] transition-colors group-hover:text-teak-dark">{c.name}</p>
               </Link>
             ))}
           </div>
@@ -82,8 +82,8 @@ export default async function Home() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
               <div className="relative flex h-full flex-col items-center justify-end p-8 text-center text-white md:p-12">
                 {b.eyebrow && <p className="text-[11px] font-medium uppercase tracking-[0.3em] text-[#D9BC86]">{b.eyebrow}</p>}
-                <h3 className="mt-2 max-w-md font-serif text-[34px] font-medium leading-tight md:text-[44px]">{b.title}</h3>
-                {b.subtitle && <p className="mt-2 text-sm font-light text-white/85">{b.subtitle}</p>}
+                <h3 className="mt-2 max-w-md font-serif text-[34px] font-semibold leading-tight md:text-[44px]">{b.title}</h3>
+                {b.subtitle && <p className="mt-2 text-sm font-normal text-white/85">{b.subtitle}</p>}
                 {b.ctaLabel && <span className="mt-5 border-b border-white pb-1 text-[11px] font-medium uppercase tracking-[0.24em]">{b.ctaLabel}</span>}
               </div>
             </Link>
@@ -120,7 +120,7 @@ export default async function Home() {
                 <img src={r.image || r.categories[0]?.image || ""} alt="" className="aspect-[4/5] w-full object-cover transition duration-1000 group-hover:scale-105" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 flex flex-col items-center p-7 text-center text-white">
-                  <h3 className="font-serif text-[30px] font-medium uppercase tracking-[0.12em]">{r.name}</h3>
+                  <h3 className="font-serif text-[30px] font-semibold uppercase tracking-[0.12em]">{r.name}</h3>
                   <span className="mt-3 border-b border-white pb-1 text-[11px] font-medium uppercase tracking-[0.24em]">Shop now</span>
                 </div>
               </Link>
@@ -152,7 +152,7 @@ export default async function Home() {
             {reviews.map((r) => (
               <figure key={r.id} className="w-[80%] shrink-0 snap-start border border-line bg-white p-6 text-center md:w-auto">
                 <div className="flex justify-center">{[1, 2, 3, 4, 5].map((i) => <Star key={i} className={`h-3.5 w-3.5 ${i <= r.rating ? "fill-teak text-teak" : "text-line"}`} />)}</div>
-                <blockquote className="mt-4 font-serif text-[18px] italic leading-relaxed text-ink">“{r.text}”</blockquote>
+                <blockquote className="mt-4 text-[15px] leading-relaxed text-ink">“{r.text}”</blockquote>
                 <figcaption className="mt-5">
                   <span className="block text-[12px] font-medium uppercase tracking-[0.2em]">{r.name}</span>
                   <span className="text-xs text-muted">{r.city}</span>
@@ -169,13 +169,13 @@ export default async function Home() {
           <div className="relative mx-auto w-full max-w-md md:order-2 md:max-w-none">
             <img src={st.aboutImage} alt="" className="arch ml-auto aspect-[4/5] w-[80%] object-cover" />
             <div className="float-slow absolute left-0 top-10 bg-ink px-6 py-5 text-white shadow-xl">
-              <p className="font-serif text-5xl font-medium text-[#D9BC86]">{catCount}+</p>
+              <p className="font-serif text-5xl font-semibold text-[#D9BC86]">{catCount}+</p>
               <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-white/80">categories of<br />handcrafted furniture</p>
             </div>
           </div>
           <div>
             <p className="eyebrow">Our story</p>
-            <h2 className="mt-3 font-serif text-[38px] font-medium leading-[1.1] md:text-[50px]">{st.storyHeading}</h2>
+            <h2 className="mt-3 font-serif text-[38px] font-semibold leading-[1.1] md:text-[50px]">{st.storyHeading}</h2>
             <Paragraphs text={st.storyText} className="mt-5 text-[15px] text-muted" />
             <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-line pt-6">
               {[
@@ -203,8 +203,8 @@ export default async function Home() {
         {st.customOrderImage && <img src={st.customOrderImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-30" loading="lazy" />}
         <div className="container-site relative py-20 text-center md:py-28">
           <p className="text-[11px] font-medium uppercase tracking-[0.3em] text-[#D9BC86]">Custom orders</p>
-          <h2 className="mx-auto mt-4 max-w-3xl font-serif text-[38px] font-medium leading-tight md:text-[58px]">Your Design, Crafted in Solid Wood</h2>
-          <p className="mx-auto mt-4 max-w-lg text-[15px] font-light text-white/80">Share a photo or sketch — our craftsmen will build it to your size and finish.</p>
+          <h2 className="mx-auto mt-4 max-w-3xl font-serif text-[38px] font-semibold leading-tight md:text-[58px]">Your Design, Crafted in Solid Wood</h2>
+          <p className="mx-auto mt-4 max-w-lg text-[15px] font-normal text-white/80">Share a photo or sketch — our craftsmen will build it to your size and finish.</p>
           <Link href="/custom-order" className="btn mt-8 bg-white text-ink hover:bg-ivory">Start a custom order</Link>
         </div>
       </section>
@@ -242,7 +242,7 @@ function FeatureTile({ p, big = false }: { p: { slug: string; name: string; pric
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
       <div className="absolute bottom-0 p-5 text-white md:p-6">
         {big && <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#D9BC86]">Spotlight</p>}
-        <p className={`font-serif font-medium leading-tight ${big ? "mt-1 text-3xl md:text-4xl" : "text-xl"}`}>{p.name.replace(/^The Wooden Tone /, "")}</p>
+        <p className={`font-serif font-semibold leading-tight ${big ? "mt-1 text-3xl md:text-4xl" : "text-xl"}`}>{p.name.replace(/^The Wooden Tone /, "")}</p>
         <p className="mt-1 text-xs text-white/85">{inr(p.price)}</p>
       </div>
     </Link>

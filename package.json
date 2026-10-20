@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "tsx scripts/migrate.ts && tsx scripts/seed.ts && next start -p ${PORT:-3000}",
+    "start": "tsx scripts/migrate.ts && tsx scripts/seed.ts && { tsx scripts/import-live.ts & next start -p ${PORT:-3000}; }",
     "db:generate": "drizzle-kit generate",
     "seed": "tsx scripts/seed.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "import:live": "tsx scripts/import-live.ts"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "^5.3.0",

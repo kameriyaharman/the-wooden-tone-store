@@ -4,8 +4,8 @@
 
 @layer base {
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
-  body { @apply bg-ivory text-ink font-sans antialiased; }
-  h1, h2, h3, .font-serif { font-family: "Cormorant Garamond", "Noto Serif Devanagari", Georgia, "Times New Roman", serif; letter-spacing: 0; }
+  body { @apply bg-ivory text-ink font-sans; text-rendering: optimizeLegibility; font-synthesis: none; }
+  h1, h2, h3, .font-serif { font-family: "Cormorant Garamond", "Noto Serif Devanagari", Georgia, "Times New Roman", serif; letter-spacing: 0; font-weight: 600; }
   ::selection { background: #F6EBD6; }
   input, select, textarea { font-size: 16px; }
   @media (min-width: 768px) { input, select, textarea { font-size: 14px; } }
@@ -13,20 +13,20 @@
 
 @layer components {
   .container-site { @apply mx-auto w-full max-w-site px-4 md:px-8; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-none px-6 py-3 text-[12px] font-medium uppercase tracking-[0.16em] transition disabled:opacity-60 disabled:cursor-not-allowed; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-none px-6 py-3 text-[13px] font-medium uppercase tracking-[0.12em] transition disabled:opacity-60 disabled:cursor-not-allowed; }
   .btn-gold { @apply btn bg-teak text-white hover:bg-teak-dark; }
   .btn-dark { @apply btn bg-ink text-white hover:bg-black; }
   .btn-outline { @apply btn border border-ink/80 bg-transparent text-ink hover:bg-ink hover:text-white; }
   .btn-sm { @apply px-3.5 py-2 text-[11px] tracking-[0.12em]; }
-  .eyebrow { @apply text-[11px] font-medium uppercase tracking-[0.28em] text-teak; }
+  .eyebrow { @apply text-[12px] font-semibold uppercase tracking-[0.2em] text-teak-dark; }
   .chip { @apply inline-flex items-center gap-1.5 bg-tint px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-teak-dark; }
   .card { @apply rounded-sm border border-line bg-white; }
   .input { @apply w-full rounded-sm border border-line bg-white px-3.5 py-2.5 text-ink outline-none transition placeholder:text-[#B0A89D] focus:border-teak focus:ring-2 focus:ring-teak/15; }
   .label { @apply mb-1.5 block text-[13px] font-medium text-ink; }
   .req::after { content: " *"; @apply text-sale; }
-  .h-display { @apply font-serif font-medium leading-[1.08]; }
+  .h-display { @apply font-serif font-semibold leading-[1.08]; }
   /* Gharana-style section title: serif, uppercase, wide tracking */
-  .h-section { @apply font-serif text-[22px] font-medium uppercase leading-tight tracking-[0.06em] sm:text-[26px] md:text-[34px] md:tracking-[0.08em]; }
+  .h-section { @apply font-serif text-[22px] font-semibold uppercase leading-tight tracking-[0.06em] sm:text-[26px] md:text-[34px] md:tracking-[0.08em]; }
   .ornament { @apply mx-auto mt-3 flex items-center justify-center gap-3 text-teak; }
   .ornament::before, .ornament::after { content: ""; @apply h-px w-12 bg-teak/50; }
   .arch { border-radius: 9999px 9999px 0 0; }
